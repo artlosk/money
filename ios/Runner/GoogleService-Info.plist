@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>779183085650-g095ed64gba1vms4n0j0jn0k90i1o3i5.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.779183085650-g095ed64gba1vms4n0j0jn0k90i1o3i5</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>779183085650-qfe5vesvmdb91cjlo3q6qbmqi8ct2fio.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAAhBZyzXX5epRPiixVzznKICDwQ6b6Rg4</string>
+	<key>GCM_SENDER_ID</key>
+	<string>779183085650</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.company.moneytracker</string>
+	<key>PROJECT_ID</key>
+	<string>moneytracker-a636b</string>
+	<key>STORAGE_BUCKET</key>
+	<string>moneytracker-a636b.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:779183085650:ios:fdcd64dddf4b72105c278b</string>
+	<key>DATABASE_URL</key>
+	<string>https://moneytracker-a636b-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>
