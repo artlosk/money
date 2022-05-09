@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:money_tracker/components/enums.dart';
 import 'package:money_tracker/observables/charges_observable.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../models/category_model.dart';
 import 'color_dialog.dart';
@@ -71,7 +71,7 @@ class _CategoryDialogState extends State<_CategoryDialog> {
   _checkCategory() async {
     await widget.stateCharges.checkExistCategory(title: _ctrlTitleCategory.text).then((value) {
       if (value == true) {
-        validateCategoryMessage = 'Категория уже существует';
+        validateCategoryMessage = FlutterI18n.translate(context, 'charges.ERROR_TEXT_CATEGORY_DUPLICATE');
         _formKey.currentState!.validate();
       } else {
         validateCategoryMessage = '';
@@ -83,7 +83,8 @@ class _CategoryDialogState extends State<_CategoryDialog> {
   _addCategory() async {
     await widget.stateCharges.createCategory(
       model: CategoryModel(
-        uid: const Uuid().v1(),
+        id: null,
+        //id: const Uuid().v1(),
         title: _ctrlTitleCategory.text,
         color: _ctrlColorCategory.text,
       ),
@@ -95,7 +96,7 @@ class _CategoryDialogState extends State<_CategoryDialog> {
     try {
       await widget.stateCharges.updateCategory(
         model: CategoryModel(
-          uid: widget.category!.uid,
+          id: widget.category!.id,
           title: _ctrlTitleCategory.text,
           color: _ctrlColorCategory.text,
         ),
@@ -117,17 +118,17 @@ class _CategoryDialogState extends State<_CategoryDialog> {
             Builder(builder: (context) {
               return Column(children: [
                 Text(
-                  widget.action == ActionsDialog.create ? 'Добавить категорию' : 'Изменить категорию',
+                  widget.action == ActionsDialog.create ? FlutterI18n.translate(context, 'charges.TEXT_CREATE_CATEGORY') : FlutterI18n.translate(context, 'charges.TEXT_UPDATE_CATEGORY'),
                   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                 ),
                TextFormField(
                   controller: _ctrlTitleCategory,
-                  decoration: const InputDecoration(
-                    label: Text('Название'),
+                  decoration: InputDecoration(
+                    label: Text(FlutterI18n.translate(context, 'charges.TEXT_TITLE')),
                   ),
                   validator: (value) {
 
-                    if (value == '') return 'Введите название категории';
+                    if (value == '') return FlutterI18n.translate(context, 'charges.ERROR_TEXT_SET_TITLE_CATEGORY');
                     if (validateCategoryMessage.isNotEmpty) {
                       return validateCategoryMessage;
                     }
@@ -137,11 +138,11 @@ class _CategoryDialogState extends State<_CategoryDialog> {
                 ),
                 TextFormField(
                   controller: _ctrlColorCategory,
-                  decoration: const InputDecoration(
-                    label: Text('Цвет'),
+                  decoration: InputDecoration(
+                    label: Text(FlutterI18n.translate(context, "charges.TEXT_COLOR")),
                   ),
                   validator: (value) {
-                    if (value == '') return 'Укажите цвет категории';
+                    if (value == '') return FlutterI18n.translate(context, 'charges.ERROR_TEXT_SET_COLOR_CATEGORY');
                     return null;
                   },
                   onTap: () {
@@ -173,7 +174,7 @@ class _CategoryDialogState extends State<_CategoryDialog> {
                   }
                 }
               },
-              child: Text(widget.action == ActionsDialog.create ? 'Добавить' : 'Изменить'),
+              child: Text(widget.action == ActionsDialog.create ? FlutterI18n.translate(context, 'charges.TEXT_CREATE') : FlutterI18n.translate(context, 'charges.TEXT_UPDATE')),
               style: ButtonStyle(
                 minimumSize: MaterialStateProperty.all<Size>(
                   const Size(325, 45),
@@ -186,7 +187,7 @@ class _CategoryDialogState extends State<_CategoryDialog> {
             TextButton(
               onPressed: () => Navigator.pop(context, null),
               child: Text(
-                'Отмена',
+                FlutterI18n.translate(context, 'charges.TEXT_CANCEL'),
                 style: TextStyle(color: Theme.of(context).accentColor),
               ),
             ),

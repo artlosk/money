@@ -23,9 +23,9 @@ class _$CategoryModelTearOff {
   const _$CategoryModelTearOff();
 
   _CategoryModel call(
-      {required String uid, required String title, required String color}) {
+      {required int? id, required String title, required String color}) {
     return _CategoryModel(
-      uid: uid,
+      id: id,
       title: title,
       color: color,
     );
@@ -41,7 +41,8 @@ const $CategoryModel = _$CategoryModelTearOff();
 
 /// @nodoc
 mixin _$CategoryModel {
-  String get uid => throw _privateConstructorUsedError;
+//@JsonKey(name: "id", fromJson: CategoryModel._stringToInt, toJson: CategoryModel._stringFromInt) required int? id,
+  int? get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get color => throw _privateConstructorUsedError;
 
@@ -56,7 +57,7 @@ abstract class $CategoryModelCopyWith<$Res> {
   factory $CategoryModelCopyWith(
           CategoryModel value, $Res Function(CategoryModel) then) =
       _$CategoryModelCopyWithImpl<$Res>;
-  $Res call({String uid, String title, String color});
+  $Res call({int? id, String title, String color});
 }
 
 /// @nodoc
@@ -70,15 +71,15 @@ class _$CategoryModelCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? uid = freezed,
+    Object? id = freezed,
     Object? title = freezed,
     Object? color = freezed,
   }) {
     return _then(_value.copyWith(
-      uid: uid == freezed
-          ? _value.uid
-          : uid // ignore: cast_nullable_to_non_nullable
-              as String,
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
       title: title == freezed
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -98,7 +99,7 @@ abstract class _$CategoryModelCopyWith<$Res>
           _CategoryModel value, $Res Function(_CategoryModel) then) =
       __$CategoryModelCopyWithImpl<$Res>;
   @override
-  $Res call({String uid, String title, String color});
+  $Res call({int? id, String title, String color});
 }
 
 /// @nodoc
@@ -114,15 +115,15 @@ class __$CategoryModelCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? uid = freezed,
+    Object? id = freezed,
     Object? title = freezed,
     Object? color = freezed,
   }) {
     return _then(_CategoryModel(
-      uid: uid == freezed
-          ? _value.uid
-          : uid // ignore: cast_nullable_to_non_nullable
-              as String,
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
       title: title == freezed
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -138,15 +139,14 @@ class __$CategoryModelCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_CategoryModel extends _CategoryModel {
-  _$_CategoryModel(
-      {required this.uid, required this.title, required this.color})
+  _$_CategoryModel({required this.id, required this.title, required this.color})
       : super._();
 
   factory _$_CategoryModel.fromJson(Map<String, dynamic> json) =>
       _$$_CategoryModelFromJson(json);
 
-  @override
-  final String uid;
+  @override //@JsonKey(name: "id", fromJson: CategoryModel._stringToInt, toJson: CategoryModel._stringFromInt) required int? id,
+  final int? id;
   @override
   final String title;
   @override
@@ -154,7 +154,7 @@ class _$_CategoryModel extends _CategoryModel {
 
   @override
   String toString() {
-    return 'CategoryModel(uid: $uid, title: $title, color: $color)';
+    return 'CategoryModel(id: $id, title: $title, color: $color)';
   }
 
   @override
@@ -162,7 +162,7 @@ class _$_CategoryModel extends _CategoryModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _CategoryModel &&
-            const DeepCollectionEquality().equals(other.uid, uid) &&
+            const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.title, title) &&
             const DeepCollectionEquality().equals(other.color, color));
   }
@@ -170,7 +170,7 @@ class _$_CategoryModel extends _CategoryModel {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(uid),
+      const DeepCollectionEquality().hash(id),
       const DeepCollectionEquality().hash(title),
       const DeepCollectionEquality().hash(color));
 
@@ -187,7 +187,7 @@ class _$_CategoryModel extends _CategoryModel {
 
 abstract class _CategoryModel extends CategoryModel {
   factory _CategoryModel(
-      {required String uid,
+      {required int? id,
       required String title,
       required String color}) = _$_CategoryModel;
   _CategoryModel._() : super._();
@@ -195,8 +195,8 @@ abstract class _CategoryModel extends CategoryModel {
   factory _CategoryModel.fromJson(Map<String, dynamic> json) =
       _$_CategoryModel.fromJson;
 
-  @override
-  String get uid;
+  @override //@JsonKey(name: "id", fromJson: CategoryModel._stringToInt, toJson: CategoryModel._stringFromInt) required int? id,
+  int? get id;
   @override
   String get title;
   @override

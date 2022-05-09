@@ -1,29 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:money_tracker/models/charge_model.dart';
 import 'package:money_tracker/observables/charges_observable.dart';
 
 Future showConfirmDeleteDialog({
   required BuildContext context,
   required ChargesState stateCharges,
-  String? categoryUid,
-  String? chargeUid,
+  int? categoryId,
+  ChargeModel? chargeModel,
 }) async {
   return await showDialog(
       context: context,
       builder: (context) => _ConfirmDeleteDialog(
             stateCharges: stateCharges,
-            categoryUid: categoryUid,
-            chargeUid: chargeUid,
+            categoryId: categoryId,
+            chargeModel: chargeModel,
           ));
 }
 
 class _ConfirmDeleteDialog extends StatefulWidget {
   const _ConfirmDeleteDialog(
-      {Key? key, required this.stateCharges, this.categoryUid, this.chargeUid})
+      {Key? key, required this.stateCharges, this.categoryId, this.chargeModel})
       : super(key: key);
 
   final ChargesState stateCharges;
-  final String? categoryUid;
-  final String? chargeUid;
+  final int? categoryId;
+  final ChargeModel? chargeModel;
 
   @override
   State<_ConfirmDeleteDialog> createState() => _ConfirmDeleteDialogState();
@@ -31,14 +33,14 @@ class _ConfirmDeleteDialog extends StatefulWidget {
 
 class _ConfirmDeleteDialogState extends State<_ConfirmDeleteDialog> {
   String getTextConfirmation() {
-    if (widget.categoryUid != null) {
-      return 'Вы действительно хотите удалить категорию?';
+    if (widget.categoryId != null) {
+      return FlutterI18n.translate(context, 'charges.TEXT_QUESTION_DELETE_CATEGORY');
     }
 
-    if (widget.chargeUid != null) {
-      return 'Вы действительно хотите удалить расход?';
+    if (widget.chargeModel != null) {
+      return FlutterI18n.translate(context, 'charges.TEXT_QUESTION_DELETE_CHARGE');
     }
-    return 'Вы действительно хотите удалить?';
+    return FlutterI18n.translate(context, 'charges.TEXT_QUESTION_DELETE');
   }
 
   @override
@@ -47,9 +49,9 @@ class _ConfirmDeleteDialogState extends State<_ConfirmDeleteDialog> {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text(
-            'Удалить',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+          Text(
+            FlutterI18n.translate(context, 'charges.TEXT_DELETE'),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
           ),
           const Padding(
             padding: EdgeInsets.all(15.0),
@@ -60,17 +62,16 @@ class _ConfirmDeleteDialogState extends State<_ConfirmDeleteDialog> {
           ),
           ElevatedButton(
             onPressed: () {
-              if (widget.chargeUid != null) {
-                widget.stateCharges.deleteCharge(chargeDocId: widget.chargeUid);
+              if (widget.chargeModel != null) {
+                widget.stateCharges.deleteCharge(chargeModel: widget.chargeModel);
               }
-
-              if (widget.categoryUid != null) {
-                widget.stateCharges.deleteCategory(categoryUid: widget.categoryUid);
+              if (widget.categoryId != null) {
+                widget.stateCharges.deleteCategory(categoryId: widget.categoryId);
               }
 
               Navigator.pop(context, null);
             },
-            child: const Text('Удалить'),
+            child: Text(FlutterI18n.translate(context, 'charges.TEXT_DELETE')),
             style: ButtonStyle(
               minimumSize: MaterialStateProperty.all<Size>(const Size(325, 45)),
               backgroundColor: MaterialStateProperty.all<Color>(
@@ -80,7 +81,7 @@ class _ConfirmDeleteDialogState extends State<_ConfirmDeleteDialog> {
           TextButton(
             onPressed: () => Navigator.pop(context, null),
             child: Text(
-              'Отмена',
+              FlutterI18n.translate(context, 'charges.TEXT_CANCEL'),
               style: TextStyle(color: Theme.of(context).accentColor),
             ),
           ),

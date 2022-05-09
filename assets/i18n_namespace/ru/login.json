@@ -1,0 +1,23 @@
+{
+  "TEXT_HEADER": "Учет расходов",
+  "TEXT_DESCRIPTION": "Ваша история расходов всегда под рукой",
+  "TEXT_SWITCH_SIGN_IN": "Уже есть аккаунт?",
+  "TEXT_SWITCH_SIGN_UP": "Еще нет аккаунта?",
+  "TEXT_RECOVERY_PASSWORD": "Забыли пароль?",
+  "TEXT_INPUT_PASSWORD": "Пароль",
+  "TEXT_SIGN_IN": "Войти",
+  "TEXT_SIGN_UP": "Регистрация",
+  "TEXT_RECOVERY_PASSWORD_HEADER": "Восстановить пароль",
+  "TEXT_RECOVERY_PASSWORD_DESCRIPTION": "Укажите Email и нажмите на кнопку \"Восстановить пароль\", после чего Вам на почту придет письмо со ссылкой на изменение пароля",
+
+
+  "ERROR_INPUT_EMAIL": "Введите E-mail",
+  "ERROR_INPUT_PASSWORD": "Введите пароль",
+  "ERROR_COMMON_SIGN_IN": "Ошибка авторизации",
+  "ERROR_COMMON_SIGN_UP": "Ошибка регистрации",
+  "ERROR_INCORRECT_EMAIL": "Некорректный E-mail",
+  "ERROR_INCORRECT_PASSWORD": "Пароль должен быть минимум из 6 символов",
+  "ERROR_EMAIL_DUPLICATE": "Данный Email существует, попробуйте другой",
+  "ERROR_SIGN_UP_ERROR": "Ошибка регистрации",
+  "ERROR_SIGN_IN_ERROR": "Ошибка авторизации"
+}

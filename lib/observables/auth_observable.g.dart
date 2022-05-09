@@ -9,7 +9,8 @@ part of 'auth_observable.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$AuthState on _AuthState, Store {
-  final _$isSignInAtom = Atom(name: '_AuthState.isSignIn');
+  late final _$isSignInAtom =
+      Atom(name: '_AuthState.isSignIn', context: context);
 
   @override
   bool get isSignIn {
@@ -24,7 +25,8 @@ mixin _$AuthState on _AuthState, Store {
     });
   }
 
-  final _$isLoadingAtom = Atom(name: '_AuthState.isLoading');
+  late final _$isLoadingAtom =
+      Atom(name: '_AuthState.isLoading', context: context);
 
   @override
   bool get isLoading {
@@ -39,7 +41,8 @@ mixin _$AuthState on _AuthState, Store {
     });
   }
 
-  final _$errorAuthAtom = Atom(name: '_AuthState.errorAuth');
+  late final _$errorAuthAtom =
+      Atom(name: '_AuthState.errorAuth', context: context);
 
   @override
   String get errorAuth {
@@ -54,15 +57,24 @@ mixin _$AuthState on _AuthState, Store {
     });
   }
 
-  final _$setImageUrlAsyncAction = AsyncAction('_AuthState.setImageUrl');
+  late final _$currentUserAtom =
+      Atom(name: '_AuthState.currentUser', context: context);
 
   @override
-  Future<dynamic> setImageUrl({required String url}) {
-    return _$setImageUrlAsyncAction.run(() => super.setImageUrl(url: url));
+  UserModel? get currentUser {
+    _$currentUserAtom.reportRead();
+    return super.currentUser;
   }
 
-  final _$signUpWithEmailAndPasswordAsyncAction =
-      AsyncAction('_AuthState.signUpWithEmailAndPassword');
+  @override
+  set currentUser(UserModel? value) {
+    _$currentUserAtom.reportWrite(value, super.currentUser, () {
+      super.currentUser = value;
+    });
+  }
+
+  late final _$signUpWithEmailAndPasswordAsyncAction =
+      AsyncAction('_AuthState.signUpWithEmailAndPassword', context: context);
 
   @override
   Future<dynamic> signUpWithEmailAndPassword(
@@ -71,8 +83,8 @@ mixin _$AuthState on _AuthState, Store {
         super.signUpWithEmailAndPassword(email: email, password: password));
   }
 
-  final _$signInWithEmailAndPasswordAsyncAction =
-      AsyncAction('_AuthState.signInWithEmailAndPassword');
+  late final _$signInWithEmailAndPasswordAsyncAction =
+      AsyncAction('_AuthState.signInWithEmailAndPassword', context: context);
 
   @override
   Future<dynamic> signInWithEmailAndPassword(
@@ -81,53 +93,20 @@ mixin _$AuthState on _AuthState, Store {
         super.signInWithEmailAndPassword(email: email, password: password));
   }
 
-  final _$signOutAsyncAction = AsyncAction('_AuthState.signOut');
+  late final _$getUserAsyncAction =
+      AsyncAction('_AuthState.getUser', context: context);
 
   @override
-  Future<bool> signOut() {
+  Future<UserModel?> getUser() {
+    return _$getUserAsyncAction.run(() => super.getUser());
+  }
+
+  late final _$signOutAsyncAction =
+      AsyncAction('_AuthState.signOut', context: context);
+
+  @override
+  Future<void> signOut() {
     return _$signOutAsyncAction.run(() => super.signOut());
-  }
-
-  final _$currentUserAsyncAction = AsyncAction('_AuthState.currentUser');
-
-  @override
-  Future<User?> currentUser() {
-    return _$currentUserAsyncAction.run(() => super.currentUser());
-  }
-
-  final _$_AuthStateActionController = ActionController(name: '_AuthState');
-
-  @override
-  String getUserId() {
-    final _$actionInfo =
-        _$_AuthStateActionController.startAction(name: '_AuthState.getUserId');
-    try {
-      return super.getUserId();
-    } finally {
-      _$_AuthStateActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  String? getEmail() {
-    final _$actionInfo =
-        _$_AuthStateActionController.startAction(name: '_AuthState.getEmail');
-    try {
-      return super.getEmail();
-    } finally {
-      _$_AuthStateActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  String? getAvatar() {
-    final _$actionInfo =
-        _$_AuthStateActionController.startAction(name: '_AuthState.getAvatar');
-    try {
-      return super.getAvatar();
-    } finally {
-      _$_AuthStateActionController.endAction(_$actionInfo);
-    }
   }
 
   @override
@@ -135,7 +114,8 @@ mixin _$AuthState on _AuthState, Store {
     return '''
 isSignIn: ${isSignIn},
 isLoading: ${isLoading},
-errorAuth: ${errorAuth}
+errorAuth: ${errorAuth},
+currentUser: ${currentUser}
     ''';
   }
 }

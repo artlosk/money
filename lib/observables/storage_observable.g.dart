@@ -9,7 +9,8 @@ part of 'storage_observable.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$StorageState on StorageStateBase, Store {
-  final _$imageAtom = Atom(name: 'StorageStateBase.image');
+  late final _$imageAtom =
+      Atom(name: 'StorageStateBase.image', context: context);
 
   @override
   XFile? get image {
@@ -24,7 +25,8 @@ mixin _$StorageState on StorageStateBase, Store {
     });
   }
 
-  final _$isPickedAtom = Atom(name: 'StorageStateBase.isPicked');
+  late final _$isPickedAtom =
+      Atom(name: 'StorageStateBase.isPicked', context: context);
 
   @override
   bool get isPicked {
@@ -39,7 +41,8 @@ mixin _$StorageState on StorageStateBase, Store {
     });
   }
 
-  final _$isLoadingAtom = Atom(name: 'StorageStateBase.isLoading');
+  late final _$isLoadingAtom =
+      Atom(name: 'StorageStateBase.isLoading', context: context);
 
   @override
   bool get isLoading {
@@ -54,10 +57,11 @@ mixin _$StorageState on StorageStateBase, Store {
     });
   }
 
-  final _$uploadImageAsyncAction = AsyncAction('StorageStateBase.uploadImage');
+  late final _$uploadImageAsyncAction =
+      AsyncAction('StorageStateBase.uploadImage', context: context);
 
   @override
-  Future<String> uploadImage() {
+  Future uploadImage() {
     return _$uploadImageAsyncAction.run(() => super.uploadImage());
   }
 

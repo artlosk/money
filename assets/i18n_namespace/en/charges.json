@@ -1,0 +1,28 @@
+{
+  "TEXT_EDIT": "Edit",
+  "TEXT_DELETE": "Delete",
+  "TEXT_CREATE": "Create",
+  "TEXT_UPDATE": "Update",
+  "TEXT_CANCEL": "Cancel",
+  "TEXT_TOTAL": "Total",
+  "TEXT_CREATE_CATEGORY": "Create category",
+  "TEXT_UPDATE_CATEGORY": "Edit category",
+  "TEXT_TITLE": "Title",
+  "TEXT_COLOR": "Color",
+  "TEXT_CREATE_CHARGE": "Create expense",
+  "TEXT_UPDATE_CHARGE": "Update expense",
+  "TEXT_TITLE_CHARGE": "Purpose of payment",
+  "TEXT_SUM": "Amount",
+  "TEXT_SET_COLOR_CATEGORY": "Choose a category color",
+  "TEXT_APPROVE": "Confirm",
+  "TEXT_QUESTION_DELETE_CATEGORY": "Do you really want to delete a category?",
+  "TEXT_QUESTION_DELETE_CHARGE": "Do you really want to remove the expense?",
+  "TEXT_QUESTION_DELETE": "Do you really want to delete?",
+  "TEXT_CHARGES_EMPTY": "There have been no expenses in this category yet this month...",
+
+  "ERROR_TEXT_SET_TITLE_CATEGORY": "Enter the category name",
+  "ERROR_TEXT_SET_COLOR_CATEGORY": "Specify the color of the category",
+  "ERROR_TEXT_SET_SUM": "Enter the amount",
+  "ERROR_TEXT_GET_DATA": "Data acquisition error",
+  "ERROR_TEXT_CATEGORY_DUPLICATE": "Category duplicate"
+}

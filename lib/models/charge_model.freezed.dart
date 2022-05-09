@@ -23,19 +23,14 @@ class _$ChargeModelTearOff {
   const _$ChargeModelTearOff();
 
   _ChargeModel call(
-      {required String uid,
-      @JsonKey(name: 'category_uid')
-          required String categoryUid,
-      @JsonKey(name: 'user_uid')
-          required String userUid,
+      {required int? id,
+      required int categoryId,
       required String description,
       required double cost,
-      @JsonKey(required: true, name: 'created_at', toJson: _pushTimeToJson, fromJson: _popTimeFromJson)
-          dynamic createdAt}) {
+      required DateTime createdAt}) {
     return _ChargeModel(
-      uid: uid,
-      categoryUid: categoryUid,
-      userUid: userUid,
+      id: id,
+      categoryId: categoryId,
       description: description,
       cost: cost,
       createdAt: createdAt,
@@ -52,19 +47,11 @@ const $ChargeModel = _$ChargeModelTearOff();
 
 /// @nodoc
 mixin _$ChargeModel {
-  String get uid => throw _privateConstructorUsedError;
-  @JsonKey(name: 'category_uid')
-  String get categoryUid => throw _privateConstructorUsedError;
-  @JsonKey(name: 'user_uid')
-  String get userUid => throw _privateConstructorUsedError;
+  int? get id => throw _privateConstructorUsedError;
+  int get categoryId => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   double get cost => throw _privateConstructorUsedError;
-  @JsonKey(
-      required: true,
-      name: 'created_at',
-      toJson: _pushTimeToJson,
-      fromJson: _popTimeFromJson)
-  dynamic get createdAt => throw _privateConstructorUsedError;
+  DateTime get createdAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -78,15 +65,11 @@ abstract class $ChargeModelCopyWith<$Res> {
           ChargeModel value, $Res Function(ChargeModel) then) =
       _$ChargeModelCopyWithImpl<$Res>;
   $Res call(
-      {String uid,
-      @JsonKey(name: 'category_uid')
-          String categoryUid,
-      @JsonKey(name: 'user_uid')
-          String userUid,
+      {int? id,
+      int categoryId,
       String description,
       double cost,
-      @JsonKey(required: true, name: 'created_at', toJson: _pushTimeToJson, fromJson: _popTimeFromJson)
-          dynamic createdAt});
+      DateTime createdAt});
 }
 
 /// @nodoc
@@ -99,26 +82,21 @@ class _$ChargeModelCopyWithImpl<$Res> implements $ChargeModelCopyWith<$Res> {
 
   @override
   $Res call({
-    Object? uid = freezed,
-    Object? categoryUid = freezed,
-    Object? userUid = freezed,
+    Object? id = freezed,
+    Object? categoryId = freezed,
     Object? description = freezed,
     Object? cost = freezed,
     Object? createdAt = freezed,
   }) {
     return _then(_value.copyWith(
-      uid: uid == freezed
-          ? _value.uid
-          : uid // ignore: cast_nullable_to_non_nullable
-              as String,
-      categoryUid: categoryUid == freezed
-          ? _value.categoryUid
-          : categoryUid // ignore: cast_nullable_to_non_nullable
-              as String,
-      userUid: userUid == freezed
-          ? _value.userUid
-          : userUid // ignore: cast_nullable_to_non_nullable
-              as String,
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      categoryId: categoryId == freezed
+          ? _value.categoryId
+          : categoryId // ignore: cast_nullable_to_non_nullable
+              as int,
       description: description == freezed
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -130,7 +108,7 @@ class _$ChargeModelCopyWithImpl<$Res> implements $ChargeModelCopyWith<$Res> {
       createdAt: createdAt == freezed
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as DateTime,
     ));
   }
 }
@@ -143,15 +121,11 @@ abstract class _$ChargeModelCopyWith<$Res>
       __$ChargeModelCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String uid,
-      @JsonKey(name: 'category_uid')
-          String categoryUid,
-      @JsonKey(name: 'user_uid')
-          String userUid,
+      {int? id,
+      int categoryId,
       String description,
       double cost,
-      @JsonKey(required: true, name: 'created_at', toJson: _pushTimeToJson, fromJson: _popTimeFromJson)
-          dynamic createdAt});
+      DateTime createdAt});
 }
 
 /// @nodoc
@@ -166,26 +140,21 @@ class __$ChargeModelCopyWithImpl<$Res> extends _$ChargeModelCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? uid = freezed,
-    Object? categoryUid = freezed,
-    Object? userUid = freezed,
+    Object? id = freezed,
+    Object? categoryId = freezed,
     Object? description = freezed,
     Object? cost = freezed,
     Object? createdAt = freezed,
   }) {
     return _then(_ChargeModel(
-      uid: uid == freezed
-          ? _value.uid
-          : uid // ignore: cast_nullable_to_non_nullable
-              as String,
-      categoryUid: categoryUid == freezed
-          ? _value.categoryUid
-          : categoryUid // ignore: cast_nullable_to_non_nullable
-              as String,
-      userUid: userUid == freezed
-          ? _value.userUid
-          : userUid // ignore: cast_nullable_to_non_nullable
-              as String,
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      categoryId: categoryId == freezed
+          ? _value.categoryId
+          : categoryId // ignore: cast_nullable_to_non_nullable
+              as int,
       description: description == freezed
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -194,7 +163,10 @@ class __$ChargeModelCopyWithImpl<$Res> extends _$ChargeModelCopyWithImpl<$Res>
           ? _value.cost
           : cost // ignore: cast_nullable_to_non_nullable
               as double,
-      createdAt: createdAt == freezed ? _value.createdAt : createdAt,
+      createdAt: createdAt == freezed
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ));
   }
 }
@@ -203,43 +175,30 @@ class __$ChargeModelCopyWithImpl<$Res> extends _$ChargeModelCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_ChargeModel extends _ChargeModel {
   _$_ChargeModel(
-      {required this.uid,
-      @JsonKey(name: 'category_uid')
-          required this.categoryUid,
-      @JsonKey(name: 'user_uid')
-          required this.userUid,
+      {required this.id,
+      required this.categoryId,
       required this.description,
       required this.cost,
-      @JsonKey(required: true, name: 'created_at', toJson: _pushTimeToJson, fromJson: _popTimeFromJson)
-          this.createdAt})
+      required this.createdAt})
       : super._();
 
   factory _$_ChargeModel.fromJson(Map<String, dynamic> json) =>
       _$$_ChargeModelFromJson(json);
 
   @override
-  final String uid;
+  final int? id;
   @override
-  @JsonKey(name: 'category_uid')
-  final String categoryUid;
-  @override
-  @JsonKey(name: 'user_uid')
-  final String userUid;
+  final int categoryId;
   @override
   final String description;
   @override
   final double cost;
   @override
-  @JsonKey(
-      required: true,
-      name: 'created_at',
-      toJson: _pushTimeToJson,
-      fromJson: _popTimeFromJson)
-  final dynamic createdAt;
+  final DateTime createdAt;
 
   @override
   String toString() {
-    return 'ChargeModel(uid: $uid, categoryUid: $categoryUid, userUid: $userUid, description: $description, cost: $cost, createdAt: $createdAt)';
+    return 'ChargeModel(id: $id, categoryId: $categoryId, description: $description, cost: $cost, createdAt: $createdAt)';
   }
 
   @override
@@ -247,10 +206,9 @@ class _$_ChargeModel extends _ChargeModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _ChargeModel &&
-            const DeepCollectionEquality().equals(other.uid, uid) &&
+            const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality()
-                .equals(other.categoryUid, categoryUid) &&
-            const DeepCollectionEquality().equals(other.userUid, userUid) &&
+                .equals(other.categoryId, categoryId) &&
             const DeepCollectionEquality()
                 .equals(other.description, description) &&
             const DeepCollectionEquality().equals(other.cost, cost) &&
@@ -260,9 +218,8 @@ class _$_ChargeModel extends _ChargeModel {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(uid),
-      const DeepCollectionEquality().hash(categoryUid),
-      const DeepCollectionEquality().hash(userUid),
+      const DeepCollectionEquality().hash(id),
+      const DeepCollectionEquality().hash(categoryId),
       const DeepCollectionEquality().hash(description),
       const DeepCollectionEquality().hash(cost),
       const DeepCollectionEquality().hash(createdAt));
@@ -280,39 +237,26 @@ class _$_ChargeModel extends _ChargeModel {
 
 abstract class _ChargeModel extends ChargeModel {
   factory _ChargeModel(
-      {required String uid,
-      @JsonKey(name: 'category_uid')
-          required String categoryUid,
-      @JsonKey(name: 'user_uid')
-          required String userUid,
+      {required int? id,
+      required int categoryId,
       required String description,
       required double cost,
-      @JsonKey(required: true, name: 'created_at', toJson: _pushTimeToJson, fromJson: _popTimeFromJson)
-          dynamic createdAt}) = _$_ChargeModel;
+      required DateTime createdAt}) = _$_ChargeModel;
   _ChargeModel._() : super._();
 
   factory _ChargeModel.fromJson(Map<String, dynamic> json) =
       _$_ChargeModel.fromJson;
 
   @override
-  String get uid;
+  int? get id;
   @override
-  @JsonKey(name: 'category_uid')
-  String get categoryUid;
-  @override
-  @JsonKey(name: 'user_uid')
-  String get userUid;
+  int get categoryId;
   @override
   String get description;
   @override
   double get cost;
   @override
-  @JsonKey(
-      required: true,
-      name: 'created_at',
-      toJson: _pushTimeToJson,
-      fromJson: _popTimeFromJson)
-  dynamic get createdAt;
+  DateTime get createdAt;
   @override
   @JsonKey(ignore: true)
   _$ChargeModelCopyWith<_ChargeModel> get copyWith =>

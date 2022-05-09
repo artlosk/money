@@ -1,0 +1,22 @@
+{
+  "TEXT_HEADER": "Cost accounting",
+  "TEXT_DESCRIPTION": "Your spending history is always at hand",
+  "TEXT_SWITCH_SIGN_IN": "Already have an account?",
+  "TEXT_SWITCH_SIGN_UP": "Don't have an account yet?",
+  "TEXT_RECOVERY_PASSWORD": "Forgot your password?",
+  "TEXT_INPUT_PASSWORD": "Password",
+  "TEXT_SIGN_IN": "Sign In",
+  "TEXT_SIGN_UP": "Sign Up",
+  "TEXT_RECOVERY_PASSWORD_HEADER": "Recover password",
+  "TEXT_RECOVERY_PASSWORD_DESCRIPTION": "Enter your email address and click on the \"Reset password\" button, after which you will receive an email with a link to change your password",
+
+  "ERROR_INPUT_EMAIL": "Please, input E-mail",
+  "ERROR_INPUT_PASSWORD": "Please, input password",
+  "ERROR_COMMON_SIGN_IN": "Sign In error",
+  "ERROR_COMMON_SIGN_UP": "Sign Up error",
+  "ERROR_INCORRECT_EMAIL": "Invalid Email",
+  "ERROR_INCORRECT_PASSWORD": "Password must be at least 6 characters",
+  "ERROR_EMAIL_DUPLICATE": "This email address exists, please try another one.",
+  "ERROR_SIGN_UP_ERROR": "Sign Up Error",
+  "ERROR_SIGN_IN_ERROR": "Sign In Error"
+}

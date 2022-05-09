@@ -1,0 +1,28 @@
+{
+  "TEXT_EDIT": "Редактировать",
+  "TEXT_DELETE": "Удалить",
+  "TEXT_CREATE": "Добавить",
+  "TEXT_UPDATE": "Изменить",
+  "TEXT_CANCEL": "Отмена",
+  "TEXT_TOTAL": "Всего",
+  "TEXT_CREATE_CATEGORY": "Добавить категорию",
+  "TEXT_UPDATE_CATEGORY": "Изменить категорию",
+  "TEXT_TITLE": "Название",
+  "TEXT_COLOR": "Цвет",
+  "TEXT_CREATE_CHARGE": "Добавить расход",
+  "TEXT_UPDATE_CHARGE": "Изменить расход",
+  "TEXT_TITLE_CHARGE": "Наименование расхода",
+  "TEXT_SUM": "Сумма",
+  "TEXT_SET_COLOR_CATEGORY": "Выберите цвет категории",
+  "TEXT_APPROVE": "Подтвердить",
+  "TEXT_QUESTION_DELETE_CATEGORY": "Вы действительно хотите удалить категорию?",
+  "TEXT_QUESTION_DELETE_CHARGE": "Вы действительно хотите удалить расход?",
+  "TEXT_QUESTION_DELETE": "Вы действительно хотите удалить?",
+  "TEXT_CHARGES_EMPTY": "В текущем месяце в данной категории еще не было расходов...",
+
+  "ERROR_TEXT_SET_TITLE_CATEGORY": "Введите название категории",
+  "ERROR_TEXT_SET_COLOR_CATEGORY": "Укажите цвет категории",
+  "ERROR_TEXT_SET_SUM": "Введите сумму",
+  "ERROR_TEXT_GET_DATA": "Ошибка получения данных",
+  "ERROR_TEXT_CATEGORY_DUPLICATE": "Категория уже существует"
+}

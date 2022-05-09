@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:money_tracker/components/extensions/hex_color_extension.dart';
 
 Future showColorPickerDialog({
@@ -46,7 +47,7 @@ class _ColorDialogState extends State<_ColorDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Выбери цвет'),
+      title: Text(FlutterI18n.translate(context, 'charges.TEXT_SET_COLOR_CATEGORY')),
       content: SingleChildScrollView(
         child: ColorPicker(
           pickerColor: HexColor.fromHex(_ctrlColorCategory.text),
@@ -57,7 +58,7 @@ class _ColorDialogState extends State<_ColorDialog> {
       ),
       actions: <Widget>[
         ElevatedButton(
-          child: const Text('Подтвердить'),
+          child: Text(FlutterI18n.translate(context, 'charges.TEXT_APPROVE')),
           onPressed: () {
             Navigator.pop(context, _ctrlColorCategory.text);
           },

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 
 import 'enums.dart';
 
@@ -11,8 +12,8 @@ class BottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      currentIndex: activeTabIndex, //stateTab.activeTabIndex,
-      onTap: onClicked, //stateTab.updateTab,
+      currentIndex: activeTabIndex,
+      onTap: onClicked,
       items: TabButton.values.map((tab) {
         return BottomNavigationBarItem(
             icon: Icon(
@@ -20,7 +21,7 @@ class BottomBar extends StatelessWidget {
                   ? Icons.credit_card
                   : Icons.account_circle,
             ),
-            label: tab == TabButton.charges ? 'Расходы' : 'Профиль');
+            label: tab == TabButton.charges ? FlutterI18n.translate(context, 'bottombar.TEXT_CHARGES') : FlutterI18n.translate(context, 'bottombar.TEXT_PROFILE'));
       }).toList(),
     );
   }

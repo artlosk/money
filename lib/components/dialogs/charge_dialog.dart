@@ -1,46 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:money_tracker/components/enums.dart';
 import 'package:money_tracker/models/charge_model.dart';
 import 'package:intl/intl.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../observables/charges_observable.dart';
 
 Future showChargeDialog(
     {required BuildContext context,
-    required String categoryUid,
+    required int categoryId,
     required ChargesState stateCharges,
     required ActionsDialog action,
     ChargeModel? oldCharge,
-    String? chargeDocId
+    int? chargeId
     }) async {
   return await showDialog(
     context: context,
     builder: (context) => _ChargeDialog(
-      categoryUid: categoryUid,
+      categoryId: categoryId,
       stateCharges: stateCharges,
       action: action,
       oldCharge: oldCharge,
-      chargeDocId: chargeDocId
+      chargeId: chargeId
     ),
   );
 }
 
 class _ChargeDialog extends StatefulWidget {
-  final String categoryUid;
+  final int categoryId;
   final ChargesState stateCharges;
   final ActionsDialog action;
   final ChargeModel? oldCharge;
-  final String? chargeDocId;
+  final int? chargeId;
 
   const _ChargeDialog(
       {Key? key,
-      required this.categoryUid,
+      required this.categoryId,
       required this.stateCharges,
       required this.action,
       this.oldCharge,
-      this.chargeDocId})
+      this.chargeId})
       : super(key: key);
 
   @override
@@ -57,9 +57,10 @@ class _ChargeDialogState extends State<_ChargeDialog> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Future<void> _selectDate(BuildContext context) async {
+    final date = widget.stateCharges.currentDate;
     final DateTime? pickedDate = await showDatePicker(
         context: context,
-        initialDate: widget.stateCharges.currentDate,
+        initialDate: date,//widget.stateCharges.currentDate,
         firstDate: DateTime(2015),
         lastDate: DateTime.now(),
         initialEntryMode: DatePickerEntryMode.input);
@@ -108,7 +109,7 @@ class _ChargeDialogState extends State<_ChargeDialog> {
             Builder(builder: (context) {
               return Column(children: [
                     Text(
-                      widget.action == ActionsDialog.create ? 'Добавить Расход' : 'Изменить Расход',
+                      widget.action == ActionsDialog.create ? FlutterI18n.translate(context, 'charges.TEXT_CREATE_CHARGE') : FlutterI18n.translate(context, 'charges.TEXT_UPDATE_CHARGE'),
                       style:
                           const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                     ),
@@ -122,18 +123,18 @@ class _ChargeDialogState extends State<_ChargeDialog> {
                     ),
                 TextFormField(
                   controller: _ctrlDescriptionCharge,
-                  decoration: const InputDecoration(
-                    label: Text('Наименование расхода'),
+                  decoration: InputDecoration(
+                    label: Text(FlutterI18n.translate(context, 'charges.TEXT_TITLE_CHARGE')),
                   ),
                 ),
                 TextFormField(
                   controller: _ctrlCostCharge,
-                  decoration: const InputDecoration(
-                    label: Text('Введите сумму'),
+                  decoration: InputDecoration(
+                    label: Text(FlutterI18n.translate(context, 'charges.TEXT_SUM')),
                   ),
                   validator: (value) {
                     if (value == '' || double.tryParse(value!)! < 1) {
-                      return 'Введите сумму';
+                      return FlutterI18n.translate(context, 'charges.ERROR_TEXT_SET_SUM');
                     }
                     return null;
                   },
@@ -154,9 +155,8 @@ class _ChargeDialogState extends State<_ChargeDialog> {
                     widget.stateCharges.createCharge(
                       model:
                       ChargeModel(
-                        uid: const Uuid().v1(),
-                        userUid: widget.stateCharges.userId,
-                        categoryUid: widget.categoryUid,
+                        id: null,
+                        categoryId: widget.categoryId,
                         description: _ctrlDescriptionCharge.text,
                         cost: double.tryParse(_ctrlCostCharge.text) ?? 0.0,
                         createdAt: chargeDate,
@@ -166,11 +166,9 @@ class _ChargeDialogState extends State<_ChargeDialog> {
 
                   if (widget.action == ActionsDialog.update) {
                     widget.stateCharges.updateCharge(
-                      chargeDocId: widget.chargeDocId,
                       model: ChargeModel(
-                        uid: widget.oldCharge!.uid,
-                        userUid: widget.oldCharge!.userUid,
-                        categoryUid: widget.oldCharge!.categoryUid,
+                        id: widget.oldCharge!.id,
+                        categoryId: widget.oldCharge!.categoryId,
                         description: _ctrlDescriptionCharge.text,
                         cost: double.tryParse(_ctrlCostCharge.text) ?? 0.0,
                         createdAt: chargeDate,
@@ -181,7 +179,7 @@ class _ChargeDialogState extends State<_ChargeDialog> {
                   Navigator.pop(context, null);
                 }
               },
-              child: Text(widget.action == ActionsDialog.create ? 'Добавить' : 'Изменить'),
+              child: Text(widget.action == ActionsDialog.create ? FlutterI18n.translate(context, 'charges.TEXT_CREATE') : FlutterI18n.translate(context, 'charges.TEXT_UPDATE')),
               style: ButtonStyle(
                 minimumSize:
                     MaterialStateProperty.all<Size>(const Size(325, 45)),
@@ -192,7 +190,7 @@ class _ChargeDialogState extends State<_ChargeDialog> {
             TextButton(
               onPressed: () => Navigator.pop(context, null),
               child: Text(
-                'Отмена',
+                FlutterI18n.translate(context, 'charges.TEXT_CANCEL'),
                 style: TextStyle(color: Theme.of(context).accentColor),
               ),
             ),

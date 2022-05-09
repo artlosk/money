@@ -10,7 +10,8 @@ part 'category_model.freezed.dart';
 class CategoryModel with _$CategoryModel {
 
   factory CategoryModel({
-    required String uid,
+    //@JsonKey(name: "id", fromJson: CategoryModel._stringToInt, toJson: CategoryModel._stringFromInt) required int? id,
+    required int? id,
     required String title,
     required String color,
   }) = _CategoryModel;
@@ -19,4 +20,7 @@ class CategoryModel with _$CategoryModel {
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) =>
       _$CategoryModelFromJson(json);
+
+  static int? _stringToInt(String? number) => number == null ? null : int.tryParse(number);
+  static String? _stringFromInt(int? number) => number?.toString();
 }
