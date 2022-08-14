@@ -1,29 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:money_tracker/observables/bill_observable.dart';
 import 'package:money_tracker/observables/charges_observable.dart';
+
+import '../../models/refill_model.dart';
 
 Future showConfirmDeleteDialog({
   required BuildContext context,
-  required ChargesState stateCharges,
+  ChargesState? stateCharges,
+  BillState? stateBill,
   String? categoryUid,
   String? chargeUid,
+  double? chargeCost,
+  String? chargeBillUid,
+  String? refillUid,
+  RefillModel? refillModel,
 }) async {
   return await showDialog(
-      context: context,
-      builder: (context) => _ConfirmDeleteDialog(
-            stateCharges: stateCharges,
-            categoryUid: categoryUid,
-            chargeUid: chargeUid,
-          ));
+    context: context,
+    builder: (context) => _ConfirmDeleteDialog(
+      stateCharges: stateCharges,
+      stateBill: stateBill,
+      categoryUid: categoryUid,
+      chargeUid: chargeUid,
+      chargeCost: chargeCost,
+      chargeBillUid: chargeBillUid,
+      refillUid: refillUid,
+      refillModel: refillModel,
+    ),
+  );
 }
 
 class _ConfirmDeleteDialog extends StatefulWidget {
-  const _ConfirmDeleteDialog(
-      {Key? key, required this.stateCharges, this.categoryUid, this.chargeUid})
-      : super(key: key);
+  const _ConfirmDeleteDialog({
+    Key? key,
+    this.stateCharges,
+    this.stateBill,
+    this.categoryUid,
+    this.chargeUid,
+    this.chargeCost,
+    this.chargeBillUid,
+    this.refillUid,
+    this.refillModel,
+  }) : super(key: key);
 
-  final ChargesState stateCharges;
+  final ChargesState? stateCharges;
+  final BillState? stateBill;
   final String? categoryUid;
   final String? chargeUid;
+  final double? chargeCost;
+  final String? chargeBillUid;
+  final String? refillUid;
+  final RefillModel? refillModel;
 
   @override
   State<_ConfirmDeleteDialog> createState() => _ConfirmDeleteDialogState();
@@ -38,6 +65,11 @@ class _ConfirmDeleteDialogState extends State<_ConfirmDeleteDialog> {
     if (widget.chargeUid != null) {
       return 'Вы действительно хотите удалить расход?';
     }
+
+    if (widget.refillUid != null) {
+      return 'Вы действительно хотите удалить приход?';
+    }
+
     return 'Вы действительно хотите удалить?';
   }
 
@@ -60,12 +92,16 @@ class _ConfirmDeleteDialogState extends State<_ConfirmDeleteDialog> {
           ),
           ElevatedButton(
             onPressed: () {
-              if (widget.chargeUid != null) {
-                widget.stateCharges.deleteCharge(chargeDocId: widget.chargeUid);
+              if (widget.stateCharges != null && widget.chargeUid != null) {
+                widget.stateCharges?.deleteCharge(chargeDocId: widget.chargeUid, chargeCost: widget.chargeCost, chargeBillUid: widget.chargeBillUid);
               }
 
-              if (widget.categoryUid != null) {
-                widget.stateCharges.deleteCategory(categoryUid: widget.categoryUid);
+              if (widget.stateCharges != null && widget.categoryUid != null) {
+                widget.stateCharges?.deleteCategory(categoryUid: widget.categoryUid);
+              }
+
+              if (widget.stateBill != null && widget.refillUid != null) {
+                widget.stateBill?.refillAmountDelete(refillDocId: widget.refillUid, refillModel: widget.refillModel);
               }
 
               Navigator.pop(context, null);

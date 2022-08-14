@@ -6,10 +6,11 @@ part of 'charges_observable.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$ChargesState on ChargesStateBase, Store {
-  final _$currentDateAtom = Atom(name: 'ChargesStateBase.currentDate');
+  late final _$currentDateAtom =
+      Atom(name: 'ChargesStateBase.currentDate', context: context);
 
   @override
   DateTime get currentDate {
@@ -24,8 +25,8 @@ mixin _$ChargesState on ChargesStateBase, Store {
     });
   }
 
-  final _$checkExistCategoryAsyncAction =
-      AsyncAction('ChargesStateBase.checkExistCategory');
+  late final _$checkExistCategoryAsyncAction =
+      AsyncAction('ChargesStateBase.checkExistCategory', context: context);
 
   @override
   Future<dynamic> checkExistCategory({required String title}) {
@@ -33,8 +34,8 @@ mixin _$ChargesState on ChargesStateBase, Store {
         .run(() => super.checkExistCategory(title: title));
   }
 
-  final _$createCategoryAsyncAction =
-      AsyncAction('ChargesStateBase.createCategory');
+  late final _$createCategoryAsyncAction =
+      AsyncAction('ChargesStateBase.createCategory', context: context);
 
   @override
   Future<dynamic> createCategory({required CategoryModel model}) {
@@ -42,8 +43,8 @@ mixin _$ChargesState on ChargesStateBase, Store {
         .run(() => super.createCategory(model: model));
   }
 
-  final _$updateCategoryAsyncAction =
-      AsyncAction('ChargesStateBase.updateCategory');
+  late final _$updateCategoryAsyncAction =
+      AsyncAction('ChargesStateBase.updateCategory', context: context);
 
   @override
   Future<dynamic> updateCategory({required CategoryModel model}) {
@@ -51,8 +52,8 @@ mixin _$ChargesState on ChargesStateBase, Store {
         .run(() => super.updateCategory(model: model));
   }
 
-  final _$deleteCategoryAsyncAction =
-      AsyncAction('ChargesStateBase.deleteCategory');
+  late final _$deleteCategoryAsyncAction =
+      AsyncAction('ChargesStateBase.deleteCategory', context: context);
 
   @override
   Future<dynamic> deleteCategory({required String? categoryUid}) {
@@ -60,8 +61,8 @@ mixin _$ChargesState on ChargesStateBase, Store {
         .run(() => super.deleteCategory(categoryUid: categoryUid));
   }
 
-  final _$createChargeAsyncAction =
-      AsyncAction('ChargesStateBase.createCharge');
+  late final _$createChargeAsyncAction =
+      AsyncAction('ChargesStateBase.createCharge', context: context);
 
   @override
   Future<dynamic> createCharge({required ChargeModel model}) {
@@ -69,42 +70,54 @@ mixin _$ChargesState on ChargesStateBase, Store {
         .run(() => super.createCharge(model: model));
   }
 
-  final _$updateChargeAsyncAction =
-      AsyncAction('ChargesStateBase.updateCharge');
+  late final _$updateChargeAsyncAction =
+      AsyncAction('ChargesStateBase.updateCharge', context: context);
 
   @override
   Future<dynamic> updateCharge(
-      {required String? chargeDocId, required ChargeModel model}) {
-    return _$updateChargeAsyncAction
-        .run(() => super.updateCharge(chargeDocId: chargeDocId, model: model));
+      {required String? chargeDocId,
+      required ChargeModel model,
+      required double oldCost,
+      required String? oldBillUid}) {
+    return _$updateChargeAsyncAction.run(() => super.updateCharge(
+        chargeDocId: chargeDocId,
+        model: model,
+        oldCost: oldCost,
+        oldBillUid: oldBillUid));
   }
 
-  final _$deleteChargeAsyncAction =
-      AsyncAction('ChargesStateBase.deleteCharge');
+  late final _$deleteChargeAsyncAction =
+      AsyncAction('ChargesStateBase.deleteCharge', context: context);
 
   @override
-  Future<dynamic> deleteCharge({required String? chargeDocId}) {
-    return _$deleteChargeAsyncAction
-        .run(() => super.deleteCharge(chargeDocId: chargeDocId));
+  Future<dynamic> deleteCharge(
+      {required String? chargeDocId,
+      required double? chargeCost,
+      required String? chargeBillUid}) {
+    return _$deleteChargeAsyncAction.run(() => super.deleteCharge(
+        chargeDocId: chargeDocId,
+        chargeCost: chargeCost,
+        chargeBillUid: chargeBillUid));
   }
 
-  final _$deleteAllDataAsyncAction =
-      AsyncAction('ChargesStateBase.deleteAllData');
+  late final _$deleteAllDataAsyncAction =
+      AsyncAction('ChargesStateBase.deleteAllData', context: context);
 
   @override
   Future<dynamic> deleteAllData() {
     return _$deleteAllDataAsyncAction.run(() => super.deleteAllData());
   }
 
-  final _$selectDateAsyncAction = AsyncAction('ChargesStateBase.selectDate');
+  late final _$selectDateAsyncAction =
+      AsyncAction('ChargesStateBase.selectDate', context: context);
 
   @override
   Future<DateTime> selectDate(BuildContext context) {
     return _$selectDateAsyncAction.run(() => super.selectDate(context));
   }
 
-  final _$ChargesStateBaseActionController =
-      ActionController(name: 'ChargesStateBase');
+  late final _$ChargesStateBaseActionController =
+      ActionController(name: 'ChargesStateBase', context: context);
 
   @override
   Stream<List<HybridModel>> getCatWithTotal({required DateTime currentDate}) {

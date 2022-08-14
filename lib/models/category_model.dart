@@ -10,6 +10,7 @@ part 'category_model.freezed.dart';
 class CategoryModel with _$CategoryModel {
 
   factory CategoryModel({
+    String? id,
     required String uid,
     required String title,
     required String color,

@@ -8,19 +8,41 @@ class BottomBar extends StatelessWidget {
   final int activeTabIndex;
   final ValueChanged<int> onClicked;
 
+  _getTab(TabButton index) {
+    switch (index) {
+      case TabButton.bill:
+        return 'Счета';
+      case TabButton.charges:
+        return 'Расходы';
+      case TabButton.profile:
+        return 'Профиль';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    _getTab(TabButton.charges);
     return BottomNavigationBar(
       currentIndex: activeTabIndex, //stateTab.activeTabIndex,
       onTap: onClicked, //stateTab.updateTab,
       items: TabButton.values.map((tab) {
-        return BottomNavigationBarItem(
-            icon: Icon(
-              tab == TabButton.charges
-                  ? Icons.credit_card
-                  : Icons.account_circle,
-            ),
-            label: tab == TabButton.charges ? 'Расходы' : 'Профиль');
+        switch(tab) {
+          case TabButton.bill:
+            return BottomNavigationBarItem(
+              icon: Icon(Icons.attach_money),
+              label: _getTab(tab),
+            );
+          case TabButton.charges:
+            return BottomNavigationBarItem(
+                icon: Icon(Icons.credit_card),
+                label: _getTab(tab),
+            );
+          case TabButton.profile:
+            return BottomNavigationBarItem(
+                icon: Icon(Icons.account_circle),
+                label: _getTab(tab),
+            );
+        }
       }).toList(),
     );
   }

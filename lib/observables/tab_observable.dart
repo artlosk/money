@@ -11,7 +11,7 @@ abstract class TabStateBase with Store {
   TabStateBase();
 
   @observable
-  int activeTabIndex = TabButton.charges.index;
+  int activeTabIndex = TabButton.bill.index;
 
   @action
   void updateTab(int index) {

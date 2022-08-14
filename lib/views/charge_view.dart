@@ -11,18 +11,19 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 import '../components/dialogs/charge_dialog.dart';
+import '../observables/bill_observable.dart';
 import '../observables/charges_observable.dart';
 
 class ChargeView extends StatelessWidget {
-  const ChargeView(
-      {Key? key, required this.category})
-      : super(key: key);
+  const ChargeView({Key? key, required this.category}) : super(key: key);
 
   final CategoryModel category;
 
   @override
   Widget build(BuildContext context) {
     final ChargesState stateCharges = Provider.of<ChargesState>(context);
+    final BillState stateBill = Provider.of<BillState>(context);
+    stateBill.getListBill();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: HexColor.fromHex(category.color),
@@ -32,6 +33,7 @@ class ChargeView extends StatelessWidget {
         stream: stateCharges.listChargeByCategory(
             categoryUid: category.uid, currentDate: stateCharges.currentDate),
         builder: (context, snapshot) {
+          // stateBill.listBillFuture();
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const LoadingView();
           }
@@ -84,12 +86,14 @@ class ChargeView extends StatelessWidget {
                           onPressed: (value) {
                             stateCharges.currentDate = charge.createdAt;
                             showChargeDialog(
-                                context: context,
-                                categoryUid: category.uid,
-                                stateCharges: stateCharges,
-                                action: ActionsDialog.update,
-                                oldCharge: charge,
-                                chargeDocId: chargeDocId);
+                              context: context,
+                              categoryUid: category.uid,
+                              stateCharges: stateCharges,
+                              stateBill: stateBill,
+                              action: ActionsDialog.update,
+                              oldCharge: charge,
+                              chargeDocId: chargeDocId,
+                            );
                           },
                           backgroundColor: const Color(0xFF21B7CA),
                           foregroundColor: Colors.white,
@@ -99,9 +103,12 @@ class ChargeView extends StatelessWidget {
                         SlidableAction(
                           onPressed: (value) {
                             showConfirmDeleteDialog(
-                                context: context,
-                                stateCharges: stateCharges,
-                                chargeUid: chargeDocId);
+                              context: context,
+                              stateCharges: stateCharges,
+                              chargeUid: chargeDocId,
+                              chargeBillUid: charge.billUid,
+                              chargeCost: charge.cost,
+                            );
                           },
                           backgroundColor: const Color(0xFFFE4A49),
                           foregroundColor: Colors.white,
@@ -131,6 +138,13 @@ class ChargeView extends StatelessWidget {
                               ),
                             ),
                             visible: charge.description.isNotEmpty,
+                          ),
+                          Text(
+                            'Счет: ${charge.billTitle ?? "Неизвестный"}',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFFABABAB),
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 3.0),

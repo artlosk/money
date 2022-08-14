@@ -1,4 +1,6 @@
 
 enum ActionsDialog {create, update}
 
-enum TabButton {charges, profile}
+enum TabButton {bill, charges, profile}
+
+enum BillTypes {cash, card}

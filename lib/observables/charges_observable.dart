@@ -20,6 +20,7 @@ abstract class ChargesStateBase with Store {
   static const COLLECTION_CHARGES = 'charges';
   static const COLLECTION_USER_CATEGORIES = 'user_categories';
   static const COLLECTION_USER_CHARGES = 'user_charges';
+  static const COLLECTION_USER_BILLS = 'user_bills';
 
   static const MESSAGE_ERROR_COLECTION_NOT_FOUND =
       'Коллекция не найдена или разорвана связь с сервером';
@@ -57,7 +58,9 @@ abstract class ChargesStateBase with Store {
         .collection(COLLECTION_CHARGES)
         .doc(userId)
         .collection(COLLECTION_USER_CATEGORIES)
-        .add(model.toJson());
+        .add(model.toJson()).then((value) {
+          value.update({'id' : value.id});
+    });
   }
 
   @action
@@ -113,28 +116,85 @@ abstract class ChargesStateBase with Store {
         .collection(COLLECTION_CHARGES)
         .doc(userId)
         .collection(COLLECTION_USER_CHARGES)
-        .add(model.toJson());
+        .add(model.toJson()).then((value) async {
+          value.update({'id': value.id}).whenComplete(() async {
+      final bill = await _firestore
+          .collection(COLLECTION_CHARGES)
+          .doc(userId)
+          .collection(COLLECTION_USER_BILLS)
+          .where('uid', isEqualTo: model.billUid).limit(1).get().then((QuerySnapshot snapshot) => snapshot.docs[0].reference);
+      await bill.update({'totalSum': FieldValue.increment(-model.cost)});
+    });
+    });
   }
 
   @action
   Future updateCharge(
-      {required String? chargeDocId, required ChargeModel model}) async {
+      {required String? chargeDocId, required ChargeModel model, required double oldCost, required String? oldBillUid}) async {
     await _firestore
         .collection(COLLECTION_CHARGES)
         .doc(userId)
         .collection(COLLECTION_USER_CHARGES)
         .doc(chargeDocId)
-        .update(model.toJson());
+        .withConverter<ChargeModel>(
+      fromFirestore: (snapshot, _) =>
+          ChargeModel.fromJson(snapshot.data()!),
+      toFirestore: (user, _) => user.toJson(),
+    ).update(model.toJson()).whenComplete(() async {
+      if (model.billUid != oldBillUid) {
+        final oldBillQuery = await _firestore
+            .collection(COLLECTION_CHARGES)
+            .doc(userId)
+            .collection(COLLECTION_USER_BILLS)
+            .where('uid', isEqualTo: oldBillUid)
+            .limit(1)
+            .get()
+            .then((QuerySnapshot snapshot) => snapshot.docs[0].reference);
+        await oldBillQuery.update({'totalSum': FieldValue.increment(oldCost)});
+
+        final newBillQuery = await _firestore
+            .collection(COLLECTION_CHARGES)
+            .doc(userId)
+            .collection(COLLECTION_USER_BILLS)
+            .where('uid', isEqualTo: model.billUid)
+            .limit(1)
+            .get()
+            .then((QuerySnapshot snapshot) => snapshot.docs[0].reference);
+        await newBillQuery.update({'totalSum': FieldValue.increment(-model.cost)});
+      } else {
+        final billQuery = await _firestore
+            .collection(COLLECTION_CHARGES)
+            .doc(userId)
+            .collection(COLLECTION_USER_BILLS)
+            .where('uid', isEqualTo: model.billUid)
+            .limit(1)
+            .get()
+            .then((QuerySnapshot snapshot) => snapshot.docs[0].reference);
+            await billQuery.update({'totalSum': FieldValue.increment(oldCost - model.cost)});
+      }
+    });
   }
 
   @action
-  Future deleteCharge({required String? chargeDocId}) async {
+  Future deleteCharge({required String? chargeDocId, required double? chargeCost, required String? chargeBillUid}) async {
     await _firestore
         .collection(COLLECTION_CHARGES)
         .doc(userId)
         .collection(COLLECTION_USER_CHARGES)
         .doc(chargeDocId)
-        .delete();
+        .delete().whenComplete(() async {
+
+          chargeCost ??= 0;
+        final billQuery = await _firestore
+            .collection(COLLECTION_CHARGES)
+            .doc(userId)
+            .collection(COLLECTION_USER_BILLS)
+            .where('uid', isEqualTo: chargeBillUid)
+            .limit(1)
+            .get()
+            .then((QuerySnapshot snapshot) => snapshot.docs[0].reference);
+        await billQuery.update({'totalSum': FieldValue.increment(chargeCost!)});
+    });
   }
 
   @action

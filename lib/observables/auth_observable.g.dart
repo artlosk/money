@@ -6,10 +6,11 @@ part of 'auth_observable.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$AuthState on _AuthState, Store {
-  final _$isSignInAtom = Atom(name: '_AuthState.isSignIn');
+  late final _$isSignInAtom =
+      Atom(name: '_AuthState.isSignIn', context: context);
 
   @override
   bool get isSignIn {
@@ -24,7 +25,8 @@ mixin _$AuthState on _AuthState, Store {
     });
   }
 
-  final _$isLoadingAtom = Atom(name: '_AuthState.isLoading');
+  late final _$isLoadingAtom =
+      Atom(name: '_AuthState.isLoading', context: context);
 
   @override
   bool get isLoading {
@@ -39,7 +41,8 @@ mixin _$AuthState on _AuthState, Store {
     });
   }
 
-  final _$errorAuthAtom = Atom(name: '_AuthState.errorAuth');
+  late final _$errorAuthAtom =
+      Atom(name: '_AuthState.errorAuth', context: context);
 
   @override
   String get errorAuth {
@@ -54,15 +57,16 @@ mixin _$AuthState on _AuthState, Store {
     });
   }
 
-  final _$setImageUrlAsyncAction = AsyncAction('_AuthState.setImageUrl');
+  late final _$setImageUrlAsyncAction =
+      AsyncAction('_AuthState.setImageUrl', context: context);
 
   @override
   Future<dynamic> setImageUrl({required String url}) {
     return _$setImageUrlAsyncAction.run(() => super.setImageUrl(url: url));
   }
 
-  final _$signUpWithEmailAndPasswordAsyncAction =
-      AsyncAction('_AuthState.signUpWithEmailAndPassword');
+  late final _$signUpWithEmailAndPasswordAsyncAction =
+      AsyncAction('_AuthState.signUpWithEmailAndPassword', context: context);
 
   @override
   Future<dynamic> signUpWithEmailAndPassword(
@@ -71,8 +75,8 @@ mixin _$AuthState on _AuthState, Store {
         super.signUpWithEmailAndPassword(email: email, password: password));
   }
 
-  final _$signInWithEmailAndPasswordAsyncAction =
-      AsyncAction('_AuthState.signInWithEmailAndPassword');
+  late final _$signInWithEmailAndPasswordAsyncAction =
+      AsyncAction('_AuthState.signInWithEmailAndPassword', context: context);
 
   @override
   Future<dynamic> signInWithEmailAndPassword(
@@ -81,21 +85,24 @@ mixin _$AuthState on _AuthState, Store {
         super.signInWithEmailAndPassword(email: email, password: password));
   }
 
-  final _$signOutAsyncAction = AsyncAction('_AuthState.signOut');
+  late final _$signOutAsyncAction =
+      AsyncAction('_AuthState.signOut', context: context);
 
   @override
   Future<bool> signOut() {
     return _$signOutAsyncAction.run(() => super.signOut());
   }
 
-  final _$currentUserAsyncAction = AsyncAction('_AuthState.currentUser');
+  late final _$currentUserAsyncAction =
+      AsyncAction('_AuthState.currentUser', context: context);
 
   @override
   Future<User?> currentUser() {
     return _$currentUserAsyncAction.run(() => super.currentUser());
   }
 
-  final _$_AuthStateActionController = ActionController(name: '_AuthState');
+  late final _$_AuthStateActionController =
+      ActionController(name: '_AuthState', context: context);
 
   @override
   String getUserId() {

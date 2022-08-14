@@ -7,6 +7,7 @@ import 'package:money_tracker/components/dialogs/category_dialog.dart';
 import 'package:money_tracker/components/dialogs/charge_dialog.dart';
 import 'package:money_tracker/components/enums.dart';
 import 'package:money_tracker/models/hybrid_model.dart';
+import 'package:money_tracker/observables/bill_observable.dart';
 import 'package:money_tracker/observables/charges_observable.dart';
 import 'package:money_tracker/views/loading_view.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +25,7 @@ class ChargesView extends StatelessWidget {
   Widget build(BuildContext context) {
     final TabState stateTab = Provider.of<TabState>(context);
     final ChargesState stateCharges = Provider.of<ChargesState>(context);
+    final BillState stateBill = Provider.of<BillState>(context);
     return Observer(
       builder: (context) {
         return Scaffold(
@@ -200,13 +202,15 @@ class ChargesView extends StatelessWidget {
                                         Navigator.of(context).push(
                                           MaterialPageRoute(
                                             builder: (BuildContext context) {
-                                              return Provider(
-                                                create: (context) => ChargesState(userId: stateCharges.userId),
-                                                builder: (context, child) {
-                                                  final ChargesState state = Provider.of<ChargesState>(context);
-                                                  state.currentDate = stateCharges.currentDate;
-                                                  return ChargeView(category: category.category);
-                                                }
+                                              return MultiProvider(providers: [
+                                                Provider(create: (context) => ChargesState(userId: stateCharges.userId)),
+                                                Provider(create: (context) => BillState(userId: stateBill.userId)),
+                                              ],
+                                              builder: (context, child) {
+                                                final ChargesState state = Provider.of<ChargesState>(context);
+                                                state.currentDate = stateCharges.currentDate;
+                                                return ChargeView(category: category.category);
+                                              }
                                               );
                                             },
                                           ),
@@ -223,6 +227,7 @@ class ChargesView extends StatelessWidget {
                                 context: context,
                                 categoryUid: category.category.uid,
                                 stateCharges: stateCharges,
+                                stateBill: stateBill,
                                 //chargeDate: stateCharges.currentDate,
                                 action: ActionsDialog.create);
                           },

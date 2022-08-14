@@ -5,24 +5,29 @@ import 'package:money_tracker/models/charge_model.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../models/bill_model.dart';
+import '../../observables/bill_observable.dart';
 import '../../observables/charges_observable.dart';
 
 Future showChargeDialog(
-    {required BuildContext context,
-    required String categoryUid,
-    required ChargesState stateCharges,
-    required ActionsDialog action,
-    ChargeModel? oldCharge,
-    String? chargeDocId
+    {
+      required BuildContext context,
+      required String categoryUid,
+      required ChargesState stateCharges,
+      required BillState stateBill,
+      required ActionsDialog action,
+      ChargeModel? oldCharge,
+      String? chargeDocId,
     }) async {
   return await showDialog(
     context: context,
     builder: (context) => _ChargeDialog(
       categoryUid: categoryUid,
       stateCharges: stateCharges,
+      stateBill: stateBill,
       action: action,
       oldCharge: oldCharge,
-      chargeDocId: chargeDocId
+      chargeDocId: chargeDocId,
     ),
   );
 }
@@ -30,17 +35,21 @@ Future showChargeDialog(
 class _ChargeDialog extends StatefulWidget {
   final String categoryUid;
   final ChargesState stateCharges;
+  final BillState stateBill;
   final ActionsDialog action;
   final ChargeModel? oldCharge;
   final String? chargeDocId;
 
   const _ChargeDialog(
-      {Key? key,
-      required this.categoryUid,
-      required this.stateCharges,
-      required this.action,
-      this.oldCharge,
-      this.chargeDocId})
+      {
+        Key? key,
+        required this.categoryUid,
+        required this.stateCharges,
+        required this.stateBill,
+        required this.action,
+        this.oldCharge,
+        this.chargeDocId,
+      })
       : super(key: key);
 
   @override
@@ -55,6 +64,8 @@ class _ChargeDialogState extends State<_ChargeDialog> {
   final TextEditingController _ctrlCostCharge = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  late BillModel selectedBill;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -75,6 +86,17 @@ class _ChargeDialogState extends State<_ChargeDialog> {
     super.initState();
     _ctrlDescriptionCharge.clear();
     _ctrlCostCharge.clear();
+
+    if (widget.action == ActionsDialog.update && widget.oldCharge?.billUid != null) {
+      selectedBill = widget.stateBill.bills.firstWhere((element) => element.uid == widget.oldCharge!.billUid);
+    } else {
+      selectedBill = widget.stateBill.bills[0];
+    }
+    // selectedBill = widget.action == ActionsDialog.update
+    // ? widget.stateBill.bills.firstWhere((element) => element.uid == widget.oldCharge!.billUid)
+    // : widget.stateBill.bills[0];
+    //
+    // selectedBill = widget.action == ActionsDialog.update ? widget.stateBill.bills[0] : widget.stateBill.bills[0];
 
     if (widget.oldCharge != null) {
         chargeDate = widget.oldCharge!.createdAt;
@@ -141,6 +163,32 @@ class _ChargeDialogState extends State<_ChargeDialog> {
                     FilteringTextInputFormatter.digitsOnly
                   ],
                 ),
+                Visibility(child:
+                DropdownButton<BillModel>(
+                  isExpanded: true,
+                  hint: Text('Выберите счёт для пополнения'),
+                  items: widget.stateBill.bills.map((bill) {
+                    return DropdownMenuItem(
+                      value: bill,
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            bill.title,
+                          ),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (BillModel? newValue) {
+                    setState(() {
+                      selectedBill = newValue!;
+                    });
+                  },
+                  value: selectedBill,
+                ), visible: widget.oldCharge?.billUid != null || widget.action == ActionsDialog.create),
               ]);
             },),
             const Padding(
@@ -156,6 +204,8 @@ class _ChargeDialogState extends State<_ChargeDialog> {
                       ChargeModel(
                         uid: const Uuid().v1(),
                         userUid: widget.stateCharges.userId,
+                        billUid: selectedBill.uid,
+                        billTitle: selectedBill.title,
                         categoryUid: widget.categoryUid,
                         description: _ctrlDescriptionCharge.text,
                         cost: double.tryParse(_ctrlCostCharge.text) ?? 0.0,
@@ -170,11 +220,15 @@ class _ChargeDialogState extends State<_ChargeDialog> {
                       model: ChargeModel(
                         uid: widget.oldCharge!.uid,
                         userUid: widget.oldCharge!.userUid,
+                        billUid: widget.oldCharge?.billUid != null ? selectedBill.uid : null,
+                        billTitle: widget.oldCharge?.billUid != null ? selectedBill.title : null,
                         categoryUid: widget.oldCharge!.categoryUid,
                         description: _ctrlDescriptionCharge.text,
                         cost: double.tryParse(_ctrlCostCharge.text) ?? 0.0,
                         createdAt: chargeDate,
                       ),
+                      oldCost: widget.oldCharge!.cost,
+                      oldBillUid: widget.oldCharge!.billUid,
                     );
                   }
 

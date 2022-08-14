@@ -12,30 +12,11 @@ part of 'hybrid_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 HybridModel _$HybridModelFromJson(Map<String, dynamic> json) {
   return _HybridModel.fromJson(json);
 }
-
-/// @nodoc
-class _$HybridModelTearOff {
-  const _$HybridModelTearOff();
-
-  _HybridModel call({required CategoryModel category, required double cost}) {
-    return _HybridModel(
-      category: category,
-      cost: cost,
-    );
-  }
-
-  HybridModel fromJson(Map<String, Object?> json) {
-    return HybridModel.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $HybridModel = _$HybridModelTearOff();
 
 /// @nodoc
 mixin _$HybridModel {
@@ -92,11 +73,11 @@ class _$HybridModelCopyWithImpl<$Res> implements $HybridModelCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$HybridModelCopyWith<$Res>
+abstract class _$$_HybridModelCopyWith<$Res>
     implements $HybridModelCopyWith<$Res> {
-  factory _$HybridModelCopyWith(
-          _HybridModel value, $Res Function(_HybridModel) then) =
-      __$HybridModelCopyWithImpl<$Res>;
+  factory _$$_HybridModelCopyWith(
+          _$_HybridModel value, $Res Function(_$_HybridModel) then) =
+      __$$_HybridModelCopyWithImpl<$Res>;
   @override
   $Res call({CategoryModel category, double cost});
 
@@ -105,21 +86,21 @@ abstract class _$HybridModelCopyWith<$Res>
 }
 
 /// @nodoc
-class __$HybridModelCopyWithImpl<$Res> extends _$HybridModelCopyWithImpl<$Res>
-    implements _$HybridModelCopyWith<$Res> {
-  __$HybridModelCopyWithImpl(
-      _HybridModel _value, $Res Function(_HybridModel) _then)
-      : super(_value, (v) => _then(v as _HybridModel));
+class __$$_HybridModelCopyWithImpl<$Res> extends _$HybridModelCopyWithImpl<$Res>
+    implements _$$_HybridModelCopyWith<$Res> {
+  __$$_HybridModelCopyWithImpl(
+      _$_HybridModel _value, $Res Function(_$_HybridModel) _then)
+      : super(_value, (v) => _then(v as _$_HybridModel));
 
   @override
-  _HybridModel get _value => super._value as _HybridModel;
+  _$_HybridModel get _value => super._value as _$_HybridModel;
 
   @override
   $Res call({
     Object? category = freezed,
     Object? cost = freezed,
   }) {
-    return _then(_HybridModel(
+    return _then(_$_HybridModel(
       category: category == freezed
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
@@ -154,11 +135,12 @@ class _$_HybridModel extends _HybridModel {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _HybridModel &&
+            other is _$_HybridModel &&
             const DeepCollectionEquality().equals(other.category, category) &&
             const DeepCollectionEquality().equals(other.cost, cost));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -167,18 +149,21 @@ class _$_HybridModel extends _HybridModel {
 
   @JsonKey(ignore: true)
   @override
-  _$HybridModelCopyWith<_HybridModel> get copyWith =>
-      __$HybridModelCopyWithImpl<_HybridModel>(this, _$identity);
+  _$$_HybridModelCopyWith<_$_HybridModel> get copyWith =>
+      __$$_HybridModelCopyWithImpl<_$_HybridModel>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_HybridModelToJson(this);
+    return _$$_HybridModelToJson(
+      this,
+    );
   }
 }
 
 abstract class _HybridModel extends HybridModel {
   factory _HybridModel(
-      {required CategoryModel category, required double cost}) = _$_HybridModel;
+      {required final CategoryModel category,
+      required final double cost}) = _$_HybridModel;
   _HybridModel._() : super._();
 
   factory _HybridModel.fromJson(Map<String, dynamic> json) =
@@ -190,6 +175,6 @@ abstract class _HybridModel extends HybridModel {
   double get cost;
   @override
   @JsonKey(ignore: true)
-  _$HybridModelCopyWith<_HybridModel> get copyWith =>
+  _$$_HybridModelCopyWith<_$_HybridModel> get copyWith =>
       throw _privateConstructorUsedError;
 }

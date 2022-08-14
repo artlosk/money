@@ -2,9 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:money_tracker/components/enums.dart';
+import 'package:money_tracker/observables/bill_observable.dart';
 import 'package:money_tracker/observables/charges_observable.dart';
 import 'package:money_tracker/observables/storage_observable.dart';
 import 'package:money_tracker/observables/tab_observable.dart';
+import 'package:money_tracker/views/bill_uid_view.dart';
+import 'package:money_tracker/views/bill_view.dart';
 import 'package:money_tracker/views/charges_view.dart';
 
 import 'package:money_tracker/views/login_view.dart';
@@ -45,13 +48,23 @@ class _InitViewState extends State<InitView> {
             body: LoadingView(),
           );
         }
+
         if (snapshot.connectionState == ConnectionState.active && snapshot.hasData) {
           return MultiProvider(
             providers: [
               Provider(create: (context) => StorageState(userId: snapshot.data?.uid),),
               Provider(create: (context) => ChargesState(userId: snapshot.data?.uid),),
+              Provider(create: (context) => BillState(userId: snapshot.data?.uid),),
             ],
-            child: Observer(builder: (context) => stateTab.activeTabIndex == TabButton.charges.index ? const ChargesView() : const ProfileView())
+            child: Observer(builder: (context) {
+              if (stateTab.activeTabIndex == TabButton.bill.index) {
+                return const BillView();
+              } else if (stateTab.activeTabIndex == TabButton.charges.index) {
+                return const ChargesView();
+              } else {
+                return const ProfileView();
+              }
+            })
           );
         }
         return const LoginView();

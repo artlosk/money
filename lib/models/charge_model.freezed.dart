@@ -12,47 +12,20 @@ part of 'charge_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 ChargeModel _$ChargeModelFromJson(Map<String, dynamic> json) {
   return _ChargeModel.fromJson(json);
 }
 
 /// @nodoc
-class _$ChargeModelTearOff {
-  const _$ChargeModelTearOff();
-
-  _ChargeModel call(
-      {required String uid,
-      @JsonKey(name: 'category_uid')
-          required String categoryUid,
-      @JsonKey(name: 'user_uid')
-          required String userUid,
-      required String description,
-      required double cost,
-      @JsonKey(required: true, name: 'created_at', toJson: _pushTimeToJson, fromJson: _popTimeFromJson)
-          dynamic createdAt}) {
-    return _ChargeModel(
-      uid: uid,
-      categoryUid: categoryUid,
-      userUid: userUid,
-      description: description,
-      cost: cost,
-      createdAt: createdAt,
-    );
-  }
-
-  ChargeModel fromJson(Map<String, Object?> json) {
-    return ChargeModel.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $ChargeModel = _$ChargeModelTearOff();
-
-/// @nodoc
 mixin _$ChargeModel {
+  String? get id => throw _privateConstructorUsedError;
   String get uid => throw _privateConstructorUsedError;
+  @JsonKey(name: 'bill_uid')
+  String? get billUid => throw _privateConstructorUsedError;
+  @JsonKey(name: 'bill_title')
+  String? get billTitle => throw _privateConstructorUsedError;
   @JsonKey(name: 'category_uid')
   String get categoryUid => throw _privateConstructorUsedError;
   @JsonKey(name: 'user_uid')
@@ -78,7 +51,12 @@ abstract class $ChargeModelCopyWith<$Res> {
           ChargeModel value, $Res Function(ChargeModel) then) =
       _$ChargeModelCopyWithImpl<$Res>;
   $Res call(
-      {String uid,
+      {String? id,
+      String uid,
+      @JsonKey(name: 'bill_uid')
+          String? billUid,
+      @JsonKey(name: 'bill_title')
+          String? billTitle,
       @JsonKey(name: 'category_uid')
           String categoryUid,
       @JsonKey(name: 'user_uid')
@@ -99,7 +77,10 @@ class _$ChargeModelCopyWithImpl<$Res> implements $ChargeModelCopyWith<$Res> {
 
   @override
   $Res call({
+    Object? id = freezed,
     Object? uid = freezed,
+    Object? billUid = freezed,
+    Object? billTitle = freezed,
     Object? categoryUid = freezed,
     Object? userUid = freezed,
     Object? description = freezed,
@@ -107,10 +88,22 @@ class _$ChargeModelCopyWithImpl<$Res> implements $ChargeModelCopyWith<$Res> {
     Object? createdAt = freezed,
   }) {
     return _then(_value.copyWith(
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
       uid: uid == freezed
           ? _value.uid
           : uid // ignore: cast_nullable_to_non_nullable
               as String,
+      billUid: billUid == freezed
+          ? _value.billUid
+          : billUid // ignore: cast_nullable_to_non_nullable
+              as String?,
+      billTitle: billTitle == freezed
+          ? _value.billTitle
+          : billTitle // ignore: cast_nullable_to_non_nullable
+              as String?,
       categoryUid: categoryUid == freezed
           ? _value.categoryUid
           : categoryUid // ignore: cast_nullable_to_non_nullable
@@ -136,14 +129,19 @@ class _$ChargeModelCopyWithImpl<$Res> implements $ChargeModelCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$ChargeModelCopyWith<$Res>
+abstract class _$$_ChargeModelCopyWith<$Res>
     implements $ChargeModelCopyWith<$Res> {
-  factory _$ChargeModelCopyWith(
-          _ChargeModel value, $Res Function(_ChargeModel) then) =
-      __$ChargeModelCopyWithImpl<$Res>;
+  factory _$$_ChargeModelCopyWith(
+          _$_ChargeModel value, $Res Function(_$_ChargeModel) then) =
+      __$$_ChargeModelCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String uid,
+      {String? id,
+      String uid,
+      @JsonKey(name: 'bill_uid')
+          String? billUid,
+      @JsonKey(name: 'bill_title')
+          String? billTitle,
       @JsonKey(name: 'category_uid')
           String categoryUid,
       @JsonKey(name: 'user_uid')
@@ -155,29 +153,44 @@ abstract class _$ChargeModelCopyWith<$Res>
 }
 
 /// @nodoc
-class __$ChargeModelCopyWithImpl<$Res> extends _$ChargeModelCopyWithImpl<$Res>
-    implements _$ChargeModelCopyWith<$Res> {
-  __$ChargeModelCopyWithImpl(
-      _ChargeModel _value, $Res Function(_ChargeModel) _then)
-      : super(_value, (v) => _then(v as _ChargeModel));
+class __$$_ChargeModelCopyWithImpl<$Res> extends _$ChargeModelCopyWithImpl<$Res>
+    implements _$$_ChargeModelCopyWith<$Res> {
+  __$$_ChargeModelCopyWithImpl(
+      _$_ChargeModel _value, $Res Function(_$_ChargeModel) _then)
+      : super(_value, (v) => _then(v as _$_ChargeModel));
 
   @override
-  _ChargeModel get _value => super._value as _ChargeModel;
+  _$_ChargeModel get _value => super._value as _$_ChargeModel;
 
   @override
   $Res call({
+    Object? id = freezed,
     Object? uid = freezed,
+    Object? billUid = freezed,
+    Object? billTitle = freezed,
     Object? categoryUid = freezed,
     Object? userUid = freezed,
     Object? description = freezed,
     Object? cost = freezed,
     Object? createdAt = freezed,
   }) {
-    return _then(_ChargeModel(
+    return _then(_$_ChargeModel(
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
       uid: uid == freezed
           ? _value.uid
           : uid // ignore: cast_nullable_to_non_nullable
               as String,
+      billUid: billUid == freezed
+          ? _value.billUid
+          : billUid // ignore: cast_nullable_to_non_nullable
+              as String?,
+      billTitle: billTitle == freezed
+          ? _value.billTitle
+          : billTitle // ignore: cast_nullable_to_non_nullable
+              as String?,
       categoryUid: categoryUid == freezed
           ? _value.categoryUid
           : categoryUid // ignore: cast_nullable_to_non_nullable
@@ -203,7 +216,12 @@ class __$ChargeModelCopyWithImpl<$Res> extends _$ChargeModelCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_ChargeModel extends _ChargeModel {
   _$_ChargeModel(
-      {required this.uid,
+      {this.id,
+      required this.uid,
+      @JsonKey(name: 'bill_uid')
+          required this.billUid,
+      @JsonKey(name: 'bill_title')
+          required this.billTitle,
       @JsonKey(name: 'category_uid')
           required this.categoryUid,
       @JsonKey(name: 'user_uid')
@@ -218,7 +236,15 @@ class _$_ChargeModel extends _ChargeModel {
       _$$_ChargeModelFromJson(json);
 
   @override
+  final String? id;
+  @override
   final String uid;
+  @override
+  @JsonKey(name: 'bill_uid')
+  final String? billUid;
+  @override
+  @JsonKey(name: 'bill_title')
+  final String? billTitle;
   @override
   @JsonKey(name: 'category_uid')
   final String categoryUid;
@@ -239,15 +265,18 @@ class _$_ChargeModel extends _ChargeModel {
 
   @override
   String toString() {
-    return 'ChargeModel(uid: $uid, categoryUid: $categoryUid, userUid: $userUid, description: $description, cost: $cost, createdAt: $createdAt)';
+    return 'ChargeModel(id: $id, uid: $uid, billUid: $billUid, billTitle: $billTitle, categoryUid: $categoryUid, userUid: $userUid, description: $description, cost: $cost, createdAt: $createdAt)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _ChargeModel &&
+            other is _$_ChargeModel &&
+            const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.uid, uid) &&
+            const DeepCollectionEquality().equals(other.billUid, billUid) &&
+            const DeepCollectionEquality().equals(other.billTitle, billTitle) &&
             const DeepCollectionEquality()
                 .equals(other.categoryUid, categoryUid) &&
             const DeepCollectionEquality().equals(other.userUid, userUid) &&
@@ -257,10 +286,14 @@ class _$_ChargeModel extends _ChargeModel {
             const DeepCollectionEquality().equals(other.createdAt, createdAt));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      const DeepCollectionEquality().hash(id),
       const DeepCollectionEquality().hash(uid),
+      const DeepCollectionEquality().hash(billUid),
+      const DeepCollectionEquality().hash(billTitle),
       const DeepCollectionEquality().hash(categoryUid),
       const DeepCollectionEquality().hash(userUid),
       const DeepCollectionEquality().hash(description),
@@ -269,33 +302,48 @@ class _$_ChargeModel extends _ChargeModel {
 
   @JsonKey(ignore: true)
   @override
-  _$ChargeModelCopyWith<_ChargeModel> get copyWith =>
-      __$ChargeModelCopyWithImpl<_ChargeModel>(this, _$identity);
+  _$$_ChargeModelCopyWith<_$_ChargeModel> get copyWith =>
+      __$$_ChargeModelCopyWithImpl<_$_ChargeModel>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_ChargeModelToJson(this);
+    return _$$_ChargeModelToJson(
+      this,
+    );
   }
 }
 
 abstract class _ChargeModel extends ChargeModel {
   factory _ChargeModel(
-      {required String uid,
+      {final String? id,
+      required final String uid,
+      @JsonKey(name: 'bill_uid')
+          required final String? billUid,
+      @JsonKey(name: 'bill_title')
+          required final String? billTitle,
       @JsonKey(name: 'category_uid')
-          required String categoryUid,
+          required final String categoryUid,
       @JsonKey(name: 'user_uid')
-          required String userUid,
-      required String description,
-      required double cost,
+          required final String userUid,
+      required final String description,
+      required final double cost,
       @JsonKey(required: true, name: 'created_at', toJson: _pushTimeToJson, fromJson: _popTimeFromJson)
-          dynamic createdAt}) = _$_ChargeModel;
+          final dynamic createdAt}) = _$_ChargeModel;
   _ChargeModel._() : super._();
 
   factory _ChargeModel.fromJson(Map<String, dynamic> json) =
       _$_ChargeModel.fromJson;
 
   @override
+  String? get id;
+  @override
   String get uid;
+  @override
+  @JsonKey(name: 'bill_uid')
+  String? get billUid;
+  @override
+  @JsonKey(name: 'bill_title')
+  String? get billTitle;
   @override
   @JsonKey(name: 'category_uid')
   String get categoryUid;
@@ -315,6 +363,6 @@ abstract class _ChargeModel extends ChargeModel {
   dynamic get createdAt;
   @override
   @JsonKey(ignore: true)
-  _$ChargeModelCopyWith<_ChargeModel> get copyWith =>
+  _$$_ChargeModelCopyWith<_$_ChargeModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
