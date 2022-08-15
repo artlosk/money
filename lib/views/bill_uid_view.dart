@@ -1,20 +1,15 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:money_tracker/components/dialogs/bill_dialog.dart';
 import 'package:money_tracker/components/dialogs/refill_dialog.dart';
-import 'package:money_tracker/views/bill_view.dart';
 import 'package:provider/provider.dart';
 
-import '../components/bottom_bar.dart';
 import '../components/dialogs/confirm_delete_dialog.dart';
 import '../components/enums.dart';
 import '../models/bill_model.dart';
-import '../models/refill_model.dart';
 import '../observables/bill_observable.dart';
-import '../observables/tab_observable.dart';
 import 'loading_view.dart';
 
 class BillUidView extends StatelessWidget {
@@ -24,10 +19,9 @@ class BillUidView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TabState stateTab = Provider.of<TabState>(context);
     final BillState stateBill = Provider.of<BillState>(context);
     stateBill.getListBill();
-    stateBill.listAllRefill(currentDate: stateBill.currentDate);
+    stateBill.listRefillByUid(currentDate: stateBill.currentDate, bill: bill);
     return Observer(
       builder: (context) {
         stateBill.getTotalSumByBill(billUid: bill.uid);
@@ -35,7 +29,7 @@ class BillUidView extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             leading: IconButton(
-                icon: Icon(Icons.arrow_back),
+                icon: const Icon(Icons.arrow_back),
                 onPressed: () {
                   Navigator.of(context).pop(true);
                 }),
@@ -62,16 +56,6 @@ class BillUidView extends StatelessWidget {
                     bill: bill),
                 icon: const Icon(Icons.arrow_circle_up),
               ),
-              // IconButton(
-              //   onPressed: () {
-              //     showBillDialog(
-              //       context: context,
-              //       stateBill: stateBill,
-              //       action: ActionsDialog.create,
-              //     );
-              //   },
-              //   icon: const Icon(Icons.add),
-              // ),
             ],
           ),
           body: stateBill.refillLoaded == false ? LoadingView() : SingleChildScrollView(
@@ -100,16 +84,14 @@ class BillUidView extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Text(
-                                'В выбранном месяце: ' +
-                                    stateBill.totalSumInMonth.toString(),
+                                'В выбранном месяце: ${stateBill.totalSumInMonth}',
                                 style: TextStyle(fontSize: 18),
                                 textAlign: TextAlign.right),
                             Text(
-                                'За все время: ' +
-                                    stateBill.totalSum.toString(),
+                                'За все время: ${stateBill.totalSum}',
                                 style: TextStyle(fontSize: 18),
                                 textAlign: TextAlign.right),
-                            Divider(),
+                            const Divider(),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -119,7 +101,6 @@ class BillUidView extends StatelessWidget {
                                       stateBill: stateBill,
                                       action: ActionsDialog.create,
                                       bill: bill),
-                                  child: const Text('Пополнить'),
                                   style: ButtonStyle(
                                     minimumSize:
                                         MaterialStateProperty.all<Size>(
@@ -128,6 +109,7 @@ class BillUidView extends StatelessWidget {
                                         MaterialStateProperty.all<Color>(
                                             Theme.of(context).accentColor),
                                   ),
+                                  child: const Text('Пополнить'),
                                 ),
                                 ElevatedButton(
                                   onPressed: () => showBillDialog(
@@ -136,7 +118,6 @@ class BillUidView extends StatelessWidget {
                                     action: ActionsDialog.update,
                                     bill: bill,
                                   ),
-                                  child: const Text('Редактировать'),
                                   style: ButtonStyle(
                                     minimumSize:
                                         MaterialStateProperty.all<Size>(
@@ -145,6 +126,7 @@ class BillUidView extends StatelessWidget {
                                         MaterialStateProperty.all<Color>(
                                             const Color(0xFF9053EB)),
                                   ),
+                                  child: const Text('Редактировать'),
                                 ),
                               ],
                             ),
@@ -222,6 +204,7 @@ class BillUidView extends StatelessWidget {
                                       stateBill: stateBill,
                                       refillUid: refillId,
                                       refillModel: refill,
+                                      billModel: bill,
                                     );
                                   },
                                   backgroundColor: const Color(0xFFFE4A49),

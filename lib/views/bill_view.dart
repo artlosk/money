@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -12,7 +11,6 @@ import '../components/bottom_bar.dart';
 import '../components/dialogs/confirm_delete_dialog.dart';
 import '../components/enums.dart';
 import '../models/bill_model.dart';
-import '../models/refill_model.dart';
 import '../observables/bill_observable.dart';
 import '../observables/tab_observable.dart';
 import 'loading_view.dart';
@@ -66,218 +64,146 @@ class BillView extends StatelessWidget {
           ),
         ],
       ),
-      body:
-          Observer(builder: (_) {
-            if (stateBill.billLoaded == false || stateBill.refillLoaded == false) {
-              return LoadingView();
-            }
-          //   print('111');
-          //   print(stateBill.bills);
-            //stateBill.listBillFuture();
-          //   print(stateBill.bills);
-          //   if (stateBill.bills.isEmpty) {
-          // FutureBuilder<QuerySnapshot<BillModel>>(
-          //     future: stateBill.listBillFuture(),
-          //     builder: (context, snapshot) {
-        // StreamBuilder<List<QueryDocumentSnapshot<BillModel>>>(
-        //   stream: stateBill.listBill(),
-        //   builder: (context, snapshot) {
-
-
-                // if (snapshot.connectionState == ConnectionState.waiting) {
-                //   return LoadingView();
-                // }
-                if (stateBill.bills.isEmpty) {
-                  return Center(
-                    child: Column(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(
-                              left: 10, top: 50, right: 10, bottom: 10),
-                          child: Text(
-                            'Необходимо добавить хотя бы один счёт для далнейшего использования приложения',
-                            style: TextStyle(fontSize: 16),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        ElevatedButton(
-                          onPressed: () => showBillDialog(
+      body: Observer(builder: (_) {
+        if (stateBill.billLoaded == false || stateBill.refillLoaded == false) {
+          return const LoadingView();
+        }
+        if (stateBill.bills.isEmpty) {
+          return Center(
+            child: Column(
+              children: [
+                const Padding(
+                  padding:
+                      EdgeInsets.only(left: 10, top: 50, right: 10, bottom: 10),
+                  child: Text(
+                    'Необходимо добавить хотя бы один счёт для далнейшего использования приложения',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () => showBillDialog(
+                    context: context,
+                    stateBill: stateBill,
+                    action: ActionsDialog.create,
+                  ),
+                  style: ButtonStyle(
+                    minimumSize:
+                        MaterialStateProperty.all<Size>(const Size(150, 35)),
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        Theme.of(context).accentColor),
+                  ),
+                  child: const Text('Создать счет'),
+                ),
+              ],
+            ),
+          );
+        } else {
+          var refills = stateBill.refills;
+          return ListView.builder(
+            itemCount: refills.length,
+            itemBuilder: (BuildContext context, int index) {
+              final refill = refills[index];
+              final refillId = refills[index].id;
+              return Container(
+                margin: const EdgeInsets.all(20.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(10.0),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.3),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: Slidable(
+                  key: const ValueKey(1),
+                  endActionPane: ActionPane(
+                    motion: const ScrollMotion(),
+                    children: [
+                      SlidableAction(
+                        onPressed: (value) {
+                          stateBill.currentDate = refill.createdAt;
+                          showRefillDialog(
+                              context: context,
+                              stateBill: stateBill,
+                              refill: refill,
+                              action: ActionsDialog.update,
+                              refillId: refillId);
+                        },
+                        backgroundColor: const Color(0xFF21B7CA),
+                        foregroundColor: Colors.white,
+                        icon: Icons.edit,
+                        label: 'Редактировать',
+                      ),
+                      SlidableAction(
+                        onPressed: (value) {
+                          showConfirmDeleteDialog(
                             context: context,
                             stateBill: stateBill,
-                            action: ActionsDialog.create,
+                            refillUid: refillId,
+                            refillModel: refill,
+                          );
+                        },
+                        backgroundColor: const Color(0xFFFE4A49),
+                        foregroundColor: Colors.white,
+                        icon: Icons.delete,
+                        label: 'Удалить',
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          refill.cost.toString(),
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w400,
                           ),
-                          child: const Text('Создать счет'),
-                          style: ButtonStyle(
-                            minimumSize: MaterialStateProperty.all<Size>(
-                                const Size(150, 35)),
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                Theme.of(context).accentColor),
+                        ),
+                        Text(
+                          'Счет: ${refill.billTitle}',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Color(0xFFABABAB),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 3.0),
+                          child: Text(
+                            DateFormat(
+                                    'dd MMMM yyyy / hh:mm',
+                                    Localizations.localeOf(context)
+                                        .languageCode)
+                                .format(refill.createdAt)
+                                .toString(),
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFFABABAB),
+                            ),
                           ),
                         ),
                       ],
                     ),
-                  );
-                } else {
-                  // return StreamBuilder<
-                  //     List<QueryDocumentSnapshot<RefillModel>>>(
-                  //   stream: stateBill.listAllRefill(
-                  //       currentDate: stateBill.currentDate),
-                  //   builder: (context, snapshot) {
-                  //     if (snapshot.connectionState == ConnectionState.waiting) {
-                  //       return const LoadingView();
-                  //     }
-
-                      // if (snapshot.connectionState == ConnectionState.active) {
-                      //   final List<QueryDocumentSnapshot<RefillModel>>?
-                      //       refills = snapshot.data;
-
-                        // if (refills == null || refills.isEmpty) {
-                        //   return const Center(
-                        //     child: Padding(
-                        //       padding: EdgeInsets.all(30),
-                        //       child: Text(
-                        //         'В текущем месяце не было пополнений...',
-                        //         style: TextStyle(fontSize: 16),
-                        //         textAlign: TextAlign.center,
-                        //       ),
-                        //     ),
-                        //   );
-                        // }
-                        var refills = stateBill.refills;
-                        return ListView.builder(
-                          itemCount: refills.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            final refill = refills[index];
-                            final refillId = refills[index].id;
-                            return Container(
-                              margin: const EdgeInsets.all(20.0),
-                              // width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(10.0),
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.3),
-                                    spreadRadius: 5,
-                                    blurRadius: 7,
-                                    offset: const Offset(0, 5),
-                                  ),
-                                ],
-                              ),
-                              child: Slidable(
-                                key: const ValueKey(1),
-                                endActionPane: ActionPane(
-                                  motion: const ScrollMotion(),
-                                  children: [
-                                    SlidableAction(
-                                      onPressed: (value) {
-                                        stateBill.currentDate =
-                                            refill.createdAt;
-                                        showRefillDialog(
-                                            context: context,
-                                            stateBill: stateBill,
-                                            refill: refill,
-                                            action: ActionsDialog.update,
-                                            refillId: refillId);
-                                      },
-                                      backgroundColor: const Color(0xFF21B7CA),
-                                      foregroundColor: Colors.white,
-                                      icon: Icons.edit,
-                                      label: 'Редактировать',
-                                    ),
-                                    SlidableAction(
-                                      onPressed: (value) {
-                                        showConfirmDeleteDialog(
-                                          context: context,
-                                          stateBill: stateBill,
-                                          refillUid: refillId,
-                                          refillModel: refill,
-                                        );
-                                      },
-                                      backgroundColor: const Color(0xFFFE4A49),
-                                      foregroundColor: Colors.white,
-                                      icon: Icons.delete,
-                                      label: 'Удалить',
-                                    ),
-                                  ],
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(20.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      Text(
-                                        refill.cost.toString(),
-                                        style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                      Text(
-                                        'Счет: ${refill.billTitle}',
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Color(0xFFABABAB),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 3.0),
-                                        child: Text(
-                                          DateFormat(
-                                                  'dd MMMM yyyy / hh:mm',
-                                                  Localizations.localeOf(
-                                                          context)
-                                                      .languageCode)
-                                              .format(refill.createdAt)
-                                              .toString(),
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                            color: Color(0xFFABABAB),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      // }
-
-                      return const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(60),
-                          child: Text(
-                            'Ошибка получения данных',
-                            style: TextStyle(fontSize: 16),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      );
-                  //   },
-                  // );
-                }
-              }),
+                  ),
+                ),
+              );
+            },
+          );
+        }
+      }),
       drawer: Drawer(
-        // child: FutureBuilder<QuerySnapshot<BillModel>>(
-        //   future: stateBill.listBillFuture(),
-        //   builder: (context, snapshot) {
         child: Observer(
           builder: (_) {
-            // List<QueryDocumentSnapshot<BillModel>>? bills =
-            //     snapshot.data;
-
-            //bills ??= [];
-
             List<BillModel>? bills = stateBill.bills;
-            // snapshot.data?.docs.map((e) => e.data()).toList();
-            // bills ??= [];
-
             return ListView.custom(
               childrenDelegate:
                   SliverChildBuilderDelegate((BuildContext context, int index) {
@@ -326,7 +252,8 @@ class BillView extends StatelessWidget {
                             ),
                           ).then((value) {
                             stateBill.getListBill();
-                            stateBill.listAllRefill(currentDate: stateBill.currentDate);
+                            stateBill.listAllRefill(
+                                currentDate: stateBill.currentDate);
                             Navigator.of(context).pop();
                           });
                         },

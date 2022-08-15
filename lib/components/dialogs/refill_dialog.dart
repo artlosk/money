@@ -5,12 +5,9 @@ import 'package:intl/intl.dart';
 import 'package:money_tracker/components/enums.dart';
 import 'package:money_tracker/models/refill_model.dart';
 import 'package:money_tracker/observables/bill_observable.dart';
-import 'package:money_tracker/observables/charges_observable.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../models/bill_model.dart';
-import '../../models/category_model.dart';
-import 'color_dialog.dart';
 
 Future showRefillDialog({
   required BuildContext context,
@@ -38,8 +35,6 @@ class _RefillDialog extends StatefulWidget {
   final RefillModel? refill;
   final String? refillId;
   final BillModel? bill;
-
-  // final List<BillModel> billList;
 
   const _RefillDialog({
     Key? key,
@@ -119,10 +114,9 @@ class _RefillDialogState extends State<_RefillDialog> {
               cost: double.parse(_ctrlAmount.text),
               createdAt: chargeDate,
           ),
+        bill: widget.bill,
+
       );
-      // setState(() {
-      //
-      // });
     } catch (e) {
       validateRefillMessage = e.toString();
     }
@@ -142,7 +136,8 @@ class _RefillDialogState extends State<_RefillDialog> {
           cost: double.parse(_ctrlAmount.text),
           createdAt: chargeDate,
         ),
-        oldCost: widget.refill!.cost
+        oldCost: widget.refill!.cost,
+        bill: widget.bill
       );
     } catch (e) {
       validateRefillMessage = e.toString();
@@ -190,15 +185,16 @@ class _RefillDialogState extends State<_RefillDialog> {
                   // validator: (val) => validateCategoryMessage,
                 ),
                 Visibility(
+                  visible: widget.action != ActionsDialog.update && widget.bill == null,
                   child: DropdownButton<BillModel>(
                     isExpanded: true,
-                    hint: Text('Выберите счёт для пополнения'),
+                    hint: const Text('Выберите счёт для пополнения'),
                     items: widget.stateBill.bills.map((bill) {
                       return DropdownMenuItem(
                         value: bill,
                         child: Row(
                           children: [
-                            SizedBox(
+                            const SizedBox(
                               width: 10,
                             ),
                             Text(
@@ -215,7 +211,6 @@ class _RefillDialogState extends State<_RefillDialog> {
                     },
                     value: widget.action != ActionsDialog.update && widget.bill == null ? selectedBill : null,
                   ),
-                  visible: widget.action != ActionsDialog.update && widget.bill == null,
                 )
               ]);
             }),
@@ -234,10 +229,18 @@ class _RefillDialogState extends State<_RefillDialog> {
                    if (widget.action == ActionsDialog.update) {
                      await _refillAmountUpdate();
                    }
-                   if (!mounted || widget.stateBill.refillLoaded == false) return;
+                   if (!mounted) return;
                    Navigator.of(context).pop();
                 }
               },
+              style: ButtonStyle(
+                minimumSize: MaterialStateProperty.all<Size>(
+                  const Size(325, 45),
+                ),
+                backgroundColor: MaterialStateProperty.all<Color>(
+                  widget.stateBill.refillLoaded == false ? const Color(0xFFD0D0D0) : Theme.of(context).primaryColor,
+                ),
+              ),
               child: widget.stateBill.refillLoaded == false
                   ? const Padding(
                 padding: EdgeInsets.all(0),
@@ -250,15 +253,7 @@ class _RefillDialogState extends State<_RefillDialog> {
                   ),
                 ),
               )
-                  : Text('Пополнить'),
-              style: ButtonStyle(
-                minimumSize: MaterialStateProperty.all<Size>(
-                  const Size(325, 45),
-                ),
-                backgroundColor: MaterialStateProperty.all<Color>(
-                  widget.stateBill.refillLoaded == false ? const Color(0xFFD0D0D0) : Theme.of(context).primaryColor,
-                ),
-              ),
+                  : const Text('Пополнить'),
             ),),
             TextButton(
               onPressed: () => Navigator.pop(context, null),

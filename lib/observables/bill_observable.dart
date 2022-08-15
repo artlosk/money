@@ -5,11 +5,8 @@ import 'package:mobx/mobx.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:money_tracker/models/bill_model.dart';
 import 'package:money_tracker/models/category_model.dart';
-import 'package:money_tracker/models/hybrid_model.dart';
-import 'package:rxdart/rxdart.dart';
 
 import '../components/dialogs/dialog_month_picker.dart';
-import '../models/charge_model.dart';
 import '../models/refill_model.dart';
 
 part 'bill_observable.g.dart';
@@ -96,22 +93,6 @@ abstract class BillStateBase with Store {
         .doc(model.id).update(model.toJson()).then((value) async {
       await getListBill();
     });
-        // .where('uid', whereIn: [model.uid])
-        // .withConverter<BillModel>(
-        //   fromFirestore: (snapshot, _) => BillModel.fromJson(snapshot.data()!),
-        //   toFirestore: (user, _) => user.toJson(),
-        // )
-        // .get().then((value) async {
-        //   value.docs.map((e) async {
-        //     await _firestore
-        //         .collection(COLLECTION_CHARGES)
-        //         .doc(userId)
-        //         .collection(COLLECTION_USER_BILLS)
-        //         .doc(e.id)
-        //         .update(model.toJson());
-        //         await getListBill();
-        //   }).toList();
-        // });
   }
 
   // @action
@@ -134,100 +115,6 @@ abstract class BillStateBase with Store {
   //                       element1.reference.delete();
   //                     }));
   //           }));
-  // }
-
-//   @action
-//   listBillObserver() {
-//     print('1111');
-//     Stream<List<QueryDocumentSnapshot<BillModel>>> query = _firestore
-//         .collection(COLLECTION_CHARGES)
-//         .doc(userId)
-//         .collection(COLLECTION_USER_BILLS)
-//         .where('user_uid', isEqualTo: userId)
-//         .withConverter<BillModel>(
-//           fromFirestore: (snapshot, _) => BillModel.fromJson(snapshot.data()!),
-//           toFirestore: (user, _) => user.toJson(),
-//         )
-//         .snapshots()
-//         .map((event) => event.docs);
-//
-//     var query1 = query;
-// bills = [];
-//     query1
-//         .map((event) => event.map((e) {
-//               bills.add(BillModel(
-//                   uid: e.data().uid,
-//                   userUid: e.data().userUid,
-//                   title: e.data().title,
-//                   type: e.data().type,
-//                   totalSum: e.data().totalSum));
-//             }).toList())
-//         .toList();
-//     return query;
-//   }
-
-  // @action
-  // Stream<List<QueryDocumentSnapshot<BillModel>>> listBill() {
-  //   Stream<List<QueryDocumentSnapshot<BillModel>>> query = _firestore
-  //       .collection(COLLECTION_CHARGES)
-  //       .doc(userId)
-  //       .collection(COLLECTION_USER_BILLS)
-  //       .where('user_uid', isEqualTo: userId)
-  //       .withConverter<BillModel>(
-  //         fromFirestore: (snapshot, _) => BillModel.fromJson(snapshot.data()!),
-  //         toFirestore: (user, _) => user.toJson(),
-  //       )
-  //       .snapshots()
-  //       .map((event) => event.docs);
-  //
-  //   var query1 = query;
-  //   query1
-  //       .map((event) {
-  //     bills = [];
-  //         event.map((e) {
-  //           bills.add(BillModel(
-  //               uid: e.data().uid,
-  //               userUid: e.data().userUid,
-  //               title: e.data().title,
-  //               type: e.data().type,
-  //               totalSum: e.data().totalSum),
-  //           );
-  //       }).toList();
-  //   })
-  //       .toList();
-  //
-  //   return query;
-  // }
-
-  // Future<QuerySnapshot<BillModel>> listBillFuture() async {
-  //   //bills = [];
-  //   //bills.clear();
-  //   var query = await _firestore
-  //       .collection(COLLECTION_CHARGES)
-  //       .doc(userId)
-  //       .collection(COLLECTION_USER_BILLS)
-  //       .withConverter<BillModel>(
-  //         fromFirestore: (snapshot, _) => BillModel.fromJson(snapshot.data()!),
-  //         toFirestore: (user, _) => user.toJson(),
-  //       )
-  //       .get();
-  //   // var query1 = query;
-  //   bills = [];
-  //   query.docs.map((e) async {
-  //     bills.add(BillModel(
-  //         uid: e.data().uid,
-  //         userUid: e.data().userUid,
-  //         title: e.data().title,
-  //         type: e.data().type,
-  //         totalSum: e.data().totalSum));
-  //   }).toList();
-  //
-  //   //   bills = [];
-  //   //   return value.docs.map((e) {
-  //   //
-  //   //   }).toList();
-  //   // });
-  //   return query;
   // }
 
   @action
@@ -300,42 +187,9 @@ abstract class BillStateBase with Store {
     refillLoaded = true;
   }
 
-  // @action
-  // Stream<List<QueryDocumentSnapshot<RefillModel>>> listAllRefill(
-  //     {required DateTime currentDate}) {
-  //   final DateTime datetimeFrom =
-  //       DateTime(currentDate.year, currentDate.month, 01, 00, 00, 00);
-  //   final DateTime datetimeTo = DateTime(
-  //       currentDate.year,
-  //       currentDate.month,
-  //       DateUtils.getDaysInMonth(currentDate.year, currentDate.month),
-  //       23,
-  //       59,
-  //       59);
-  //
-  //   return _firestore
-  //       .collection(COLLECTION_CHARGES)
-  //       .doc(userId)
-  //       .collection(COLLECTION_USER_REFILLS)
-  //       .where('user_uid', isEqualTo: userId)
-  //       .where('created_at',
-  //           isGreaterThanOrEqualTo: Timestamp.fromDate(datetimeFrom))
-  //       .where('created_at',
-  //           isLessThanOrEqualTo: Timestamp.fromDate(datetimeTo))
-  //       .orderBy('created_at', descending: true)
-  //       .withConverter<RefillModel>(
-  //         fromFirestore: (snapshot, _) =>
-  //             RefillModel.fromJson(snapshot.data()!),
-  //         toFirestore: (user, _) => user.toJson(),
-  //       )
-  //       .snapshots()
-  //       .map((event) => event.docs)
-  //       .delay(const Duration(milliseconds: 200));
-  // }
-
   @action
-  Stream<List<QueryDocumentSnapshot<RefillModel>>> listRefillByUid(
-      {required DateTime currentDate, required BillModel bill}) {
+  Future listRefillByUid(
+      {required DateTime currentDate, required BillModel bill}) async {
     refillLoaded = false;
     final DateTime datetimeFrom =
     DateTime(currentDate.year, currentDate.month, 01, 00, 00, 00);
@@ -347,25 +201,34 @@ abstract class BillStateBase with Store {
         59,
         59);
 
-    return _firestore
+    await _firestore
         .collection(COLLECTION_CHARGES)
         .doc(userId)
         .collection(COLLECTION_USER_REFILLS)
         .where('user_uid', isEqualTo: userId)
-    .where('bill_uid', isEqualTo: bill.uid)
         .where('created_at', isGreaterThanOrEqualTo: Timestamp.fromDate(datetimeFrom))
         .where('created_at', isLessThanOrEqualTo: Timestamp.fromDate(datetimeTo))
+    .where('bill_uid', isEqualTo: bill.uid)
         .orderBy('created_at', descending: true)
-        .withConverter<RefillModel>(
-      fromFirestore: (snapshot, _) =>
-          RefillModel.fromJson(snapshot.data()!),
-      toFirestore: (user, _) => user.toJson(),
-    )
-        .snapshots()
-        .map((event) {
-          refillLoaded = true;
-          return event.docs;
+        .withConverter<RefillModel>(fromFirestore: (snapshot, _) => RefillModel.fromJson(snapshot.data()!), toFirestore: (user, _) => user.toJson(),)
+        .get().then((value) {
+      refills.clear();
+      value.docs.map((event) {
+        var id = event.id;
+        var data = event.data();
+        refills.add(RefillModel(
+          id: id,
+          uid: data.uid,
+          userUid: data.userUid,
+          billId: data.billId,
+          billTitle: data.billTitle,
+          billUid: data.billUid,
+          cost: data.cost,
+          createdAt: data.createdAt,
+        ));
+      }).toList();
     });
+    refillLoaded = true;
   }
 
   @action
@@ -383,7 +246,7 @@ abstract class BillStateBase with Store {
   }
 
   @action
-  Future refillAmountCreate({required RefillModel refillModel}) async {
+  Future refillAmountCreate({required RefillModel refillModel, required BillModel? bill}) async {
     refillLoaded = false;
     await _firestore
         .collection(COLLECTION_CHARGES)
@@ -392,19 +255,6 @@ abstract class BillStateBase with Store {
         .add(refillModel.toJson())
     .then((value) async {
       value.update({'id' : value.id}).then((value) async {
-      // await _firestore
-      //     .collection(COLLECTION_CHARGES)
-      //     .doc(userId)
-      //     .collection(COLLECTION_USER_BILLS)
-      //     .where('uid', whereIn: [refillModel.billUid])
-      //     .withConverter<BillModel>(
-      //   fromFirestore: (snapshot, _) => BillModel.fromJson(snapshot.data()!),
-      //   toFirestore: (user, _) => user.toJson(),
-      // )
-      //     .get()
-      //     .then((value) async {
-      //   value.docs.map((billData) async {
-      //     var bill = billData.data();
           await _firestore
               .collection(COLLECTION_CHARGES)
               .doc(userId)
@@ -415,13 +265,18 @@ abstract class BillStateBase with Store {
             await getTotalSumMonthByBill(billUid: refillModel.billUid);
           });
       });
-      await getListBill().whenComplete(() => listAllRefill(currentDate: currentDate));
-      //await listAllRefill(currentDate: currentDate);
+      await getListBill().whenComplete(() {
+        if (bill != null) {
+          listRefillByUid(currentDate: currentDate, bill: bill);
+        } else {
+          listAllRefill(currentDate: currentDate);
+        }
+      });
     });
   }
 
   @action
-  Future refillAmountUpdate({required RefillModel refillModel, required double oldCost}) async {
+  Future refillAmountUpdate({required RefillModel refillModel, required double oldCost, required BillModel? bill}) async {
     await _firestore
         .collection(COLLECTION_CHARGES)
         .doc(userId)
@@ -464,7 +319,11 @@ abstract class BillStateBase with Store {
               .collection(COLLECTION_USER_BILLS)
               .doc(e.id)
               .update({"totalSum": totalSum}).whenComplete(() async {
-          await listAllRefill(currentDate: currentDate);
+                if (bill != null) {
+                  await listRefillByUid(currentDate: currentDate, bill: bill);
+                } else {
+                  await listAllRefill(currentDate: currentDate);
+                }
           await getTotalSumMonthByBill(billUid: e.data().uid);
           await getTotalSumByBill(billUid: e.data().uid);
           });
@@ -474,7 +333,7 @@ abstract class BillStateBase with Store {
   }
 
   @action
-  Future refillAmountDelete({required RefillModel? refillModel, required String? refillDocId}) async {
+  Future refillAmountDelete({required RefillModel? refillModel, required String? refillDocId, BillModel? bill}) async {
       await _firestore
           .collection(COLLECTION_CHARGES)
           .doc(userId)
@@ -504,7 +363,11 @@ abstract class BillStateBase with Store {
                 .collection(COLLECTION_USER_BILLS)
                 .doc(e.id)
                 .update({"totalSum": totalSum}).whenComplete(() async {
-                  await listAllRefill(currentDate: currentDate);
+                  if (bill != null) {
+                    await listRefillByUid(currentDate: currentDate, bill: bill);
+                  } else {
+                    await listAllRefill(currentDate: currentDate);
+                  }
               await getListBill();
             });
           }).toList();

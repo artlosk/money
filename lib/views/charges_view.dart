@@ -104,15 +104,17 @@ class ChargesView extends StatelessWidget {
                                   animationDuration: 500),
                             ],
                           ),
+                    flex: 1,
                   ),
                   Expanded(
+                    flex: 2,
                     child: ListView.builder(
                       itemCount: categories!.length,
                       itemBuilder: (BuildContext context, int index) {
                         final category = categories[index];
                         return GestureDetector(
                           child: Container(
-                            margin: const EdgeInsets.all(20.0),
+                            margin: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: const BorderRadius.all(
@@ -162,7 +164,7 @@ class ChargesView extends StatelessWidget {
                               ),
 
                               child: Padding(
-                                padding: const EdgeInsets.all(20.0),
+                                padding: const EdgeInsets.all(15.0),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,

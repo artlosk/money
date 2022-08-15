@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money_tracker/observables/bill_observable.dart';
 import 'package:money_tracker/observables/charges_observable.dart';
 
+import '../../models/bill_model.dart';
 import '../../models/refill_model.dart';
 
 Future showConfirmDeleteDialog({
@@ -14,6 +15,7 @@ Future showConfirmDeleteDialog({
   String? chargeBillUid,
   String? refillUid,
   RefillModel? refillModel,
+  BillModel? billModel,
 }) async {
   return await showDialog(
     context: context,
@@ -26,6 +28,7 @@ Future showConfirmDeleteDialog({
       chargeBillUid: chargeBillUid,
       refillUid: refillUid,
       refillModel: refillModel,
+      billModel: billModel,
     ),
   );
 }
@@ -41,6 +44,7 @@ class _ConfirmDeleteDialog extends StatefulWidget {
     this.chargeBillUid,
     this.refillUid,
     this.refillModel,
+    this.billModel,
   }) : super(key: key);
 
   final ChargesState? stateCharges;
@@ -51,6 +55,7 @@ class _ConfirmDeleteDialog extends StatefulWidget {
   final String? chargeBillUid;
   final String? refillUid;
   final RefillModel? refillModel;
+  final BillModel? billModel;
 
   @override
   State<_ConfirmDeleteDialog> createState() => _ConfirmDeleteDialogState();
@@ -101,7 +106,7 @@ class _ConfirmDeleteDialogState extends State<_ConfirmDeleteDialog> {
               }
 
               if (widget.stateBill != null && widget.refillUid != null) {
-                widget.stateBill?.refillAmountDelete(refillDocId: widget.refillUid, refillModel: widget.refillModel);
+                widget.stateBill?.refillAmountDelete(refillDocId: widget.refillUid, refillModel: widget.refillModel, bill: widget.billModel);
               }
 
               Navigator.pop(context, null);

@@ -162,6 +162,16 @@ mixin _$BillState on BillStateBase, Store {
         .run(() => super.listAllRefill(currentDate: currentDate));
   }
 
+  late final _$listRefillByUidAsyncAction =
+      AsyncAction('BillStateBase.listRefillByUid', context: context);
+
+  @override
+  Future<dynamic> listRefillByUid(
+      {required DateTime currentDate, required BillModel bill}) {
+    return _$listRefillByUidAsyncAction
+        .run(() => super.listRefillByUid(currentDate: currentDate, bill: bill));
+  }
+
   late final _$selectDateAsyncAction =
       AsyncAction('BillStateBase.selectDate', context: context);
 
@@ -174,9 +184,10 @@ mixin _$BillState on BillStateBase, Store {
       AsyncAction('BillStateBase.refillAmountCreate', context: context);
 
   @override
-  Future<dynamic> refillAmountCreate({required RefillModel refillModel}) {
-    return _$refillAmountCreateAsyncAction
-        .run(() => super.refillAmountCreate(refillModel: refillModel));
+  Future<dynamic> refillAmountCreate(
+      {required RefillModel refillModel, required BillModel? bill}) {
+    return _$refillAmountCreateAsyncAction.run(
+        () => super.refillAmountCreate(refillModel: refillModel, bill: bill));
   }
 
   late final _$refillAmountUpdateAsyncAction =
@@ -184,9 +195,11 @@ mixin _$BillState on BillStateBase, Store {
 
   @override
   Future<dynamic> refillAmountUpdate(
-      {required RefillModel refillModel, required double oldCost}) {
-    return _$refillAmountUpdateAsyncAction.run(() =>
-        super.refillAmountUpdate(refillModel: refillModel, oldCost: oldCost));
+      {required RefillModel refillModel,
+      required double oldCost,
+      required BillModel? bill}) {
+    return _$refillAmountUpdateAsyncAction.run(() => super.refillAmountUpdate(
+        refillModel: refillModel, oldCost: oldCost, bill: bill));
   }
 
   late final _$refillAmountDeleteAsyncAction =
@@ -194,24 +207,11 @@ mixin _$BillState on BillStateBase, Store {
 
   @override
   Future<dynamic> refillAmountDelete(
-      {required RefillModel? refillModel, required String? refillDocId}) {
+      {required RefillModel? refillModel,
+      required String? refillDocId,
+      BillModel? bill}) {
     return _$refillAmountDeleteAsyncAction.run(() => super.refillAmountDelete(
-        refillModel: refillModel, refillDocId: refillDocId));
-  }
-
-  late final _$BillStateBaseActionController =
-      ActionController(name: 'BillStateBase', context: context);
-
-  @override
-  Stream<List<QueryDocumentSnapshot<RefillModel>>> listRefillByUid(
-      {required DateTime currentDate, required BillModel bill}) {
-    final _$actionInfo = _$BillStateBaseActionController.startAction(
-        name: 'BillStateBase.listRefillByUid');
-    try {
-      return super.listRefillByUid(currentDate: currentDate, bill: bill);
-    } finally {
-      _$BillStateBaseActionController.endAction(_$actionInfo);
-    }
+        refillModel: refillModel, refillDocId: refillDocId, bill: bill));
   }
 
   @override
