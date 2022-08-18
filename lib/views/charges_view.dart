@@ -26,12 +26,17 @@ class ChargesView extends StatelessWidget {
     final TabState stateTab = Provider.of<TabState>(context);
     final ChargesState stateCharges = Provider.of<ChargesState>(context);
     final BillState stateBill = Provider.of<BillState>(context);
+    stateCharges.getTotalSumMonth();
+    stateCharges.getTotalSumDay();
     return Observer(
       builder: (context) {
         return Scaffold(
           appBar: AppBar(
             title: TextButton(
-              onPressed: () => stateCharges.selectDate(context),
+              onPressed: () => stateCharges.selectDate(context).then((value) async {
+                await stateCharges.getTotalSumDay();
+                await stateCharges.getTotalSumMonth();
+              }),
               child: Center(
                 child: Text(
                   DateFormat('LLLL yyyy',
@@ -75,6 +80,7 @@ class ChargesView extends StatelessWidget {
               return Column(
                 children: [
                   Expanded(
+                    flex: 1,
                     child: totalCost == 0
                         ? Container(
                             color: const Color(0xFFD0D0D0),
@@ -104,7 +110,40 @@ class ChargesView extends StatelessWidget {
                                   animationDuration: 500),
                             ],
                           ),
-                    flex: 1,
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(10.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(10.0),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Observer(builder: (_) {
+                        return Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Text(
+                                  'В выбранном месяце: ${stateCharges.totalSumMonth}',
+                                  style: TextStyle(fontSize: 14),
+                                  textAlign: TextAlign.left),
+                              Text(
+                                  'Сегодня: ${stateCharges.totalSumDay}',
+                                  style: TextStyle(fontSize: 14),
+                                  textAlign: TextAlign.left),
+                            ]);
+                      }),
+                    ),
                   ),
                   Expanded(
                     flex: 2,
@@ -231,7 +270,11 @@ class ChargesView extends StatelessWidget {
                                 stateCharges: stateCharges,
                                 stateBill: stateBill,
                                 //chargeDate: stateCharges.currentDate,
-                                action: ActionsDialog.create);
+                                action: ActionsDialog.create,
+                            ).then((value) async {
+                              await stateCharges.getTotalSumDay();
+                              await stateCharges.getTotalSumMonth();
+                            });
                           },
                         );
                       },

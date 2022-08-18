@@ -25,6 +25,38 @@ mixin _$ChargesState on ChargesStateBase, Store {
     });
   }
 
+  late final _$totalSumDayAtom =
+      Atom(name: 'ChargesStateBase.totalSumDay', context: context);
+
+  @override
+  double get totalSumDay {
+    _$totalSumDayAtom.reportRead();
+    return super.totalSumDay;
+  }
+
+  @override
+  set totalSumDay(double value) {
+    _$totalSumDayAtom.reportWrite(value, super.totalSumDay, () {
+      super.totalSumDay = value;
+    });
+  }
+
+  late final _$totalSumMonthAtom =
+      Atom(name: 'ChargesStateBase.totalSumMonth', context: context);
+
+  @override
+  double get totalSumMonth {
+    _$totalSumMonthAtom.reportRead();
+    return super.totalSumMonth;
+  }
+
+  @override
+  set totalSumMonth(double value) {
+    _$totalSumMonthAtom.reportWrite(value, super.totalSumMonth, () {
+      super.totalSumMonth = value;
+    });
+  }
+
   late final _$checkExistCategoryAsyncAction =
       AsyncAction('ChargesStateBase.checkExistCategory', context: context);
 
@@ -146,7 +178,9 @@ mixin _$ChargesState on ChargesStateBase, Store {
   @override
   String toString() {
     return '''
-currentDate: ${currentDate}
+currentDate: ${currentDate},
+totalSumDay: ${totalSumDay},
+totalSumMonth: ${totalSumMonth}
     ''';
   }
 }

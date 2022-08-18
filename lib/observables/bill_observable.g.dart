@@ -88,6 +88,38 @@ mixin _$BillState on BillStateBase, Store {
     });
   }
 
+  late final _$transfersAtom =
+      Atom(name: 'BillStateBase.transfers', context: context);
+
+  @override
+  ObservableList<BillTransferModel> get transfers {
+    _$transfersAtom.reportRead();
+    return super.transfers;
+  }
+
+  @override
+  set transfers(ObservableList<BillTransferModel> value) {
+    _$transfersAtom.reportWrite(value, super.transfers, () {
+      super.transfers = value;
+    });
+  }
+
+  late final _$transferLoadedAtom =
+      Atom(name: 'BillStateBase.transferLoaded', context: context);
+
+  @override
+  bool get transferLoaded {
+    _$transferLoadedAtom.reportRead();
+    return super.transferLoaded;
+  }
+
+  @override
+  set transferLoaded(bool value) {
+    _$transferLoadedAtom.reportWrite(value, super.transferLoaded, () {
+      super.transferLoaded = value;
+    });
+  }
+
   late final _$totalSumAtom =
       Atom(name: 'BillStateBase.totalSum', context: context);
 
@@ -222,6 +254,8 @@ bills: ${bills},
 billLoaded: ${billLoaded},
 refills: ${refills},
 refillLoaded: ${refillLoaded},
+transfers: ${transfers},
+transferLoaded: ${transferLoaded},
 totalSum: ${totalSum},
 totalSumInMonth: ${totalSumInMonth}
     ''';

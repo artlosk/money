@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:money_tracker/observables/bill_observable.dart';
 import 'package:money_tracker/observables/charges_observable.dart';
 
@@ -95,29 +96,42 @@ class _ConfirmDeleteDialogState extends State<_ConfirmDeleteDialog> {
           const Padding(
             padding: EdgeInsets.all(15.0),
           ),
-          ElevatedButton(
-            onPressed: () {
+      Observer(builder: (_) => ElevatedButton(
+            onPressed: () async {
               if (widget.stateCharges != null && widget.chargeUid != null) {
-                widget.stateCharges?.deleteCharge(chargeDocId: widget.chargeUid, chargeCost: widget.chargeCost, chargeBillUid: widget.chargeBillUid);
+                await widget.stateCharges?.deleteCharge(chargeDocId: widget.chargeUid, chargeCost: widget.chargeCost, chargeBillUid: widget.chargeBillUid);
               }
 
               if (widget.stateCharges != null && widget.categoryUid != null) {
-                widget.stateCharges?.deleteCategory(categoryUid: widget.categoryUid);
+                await widget.stateCharges?.deleteCategory(categoryUid: widget.categoryUid);
               }
 
               if (widget.stateBill != null && widget.refillUid != null) {
-                widget.stateBill?.refillAmountDelete(refillDocId: widget.refillUid, refillModel: widget.refillModel, bill: widget.billModel);
+                await widget.stateBill?.refillAmountDelete(refillDocId: widget.refillUid, refillModel: widget.refillModel, bill: widget.billModel);
               }
-
-              Navigator.pop(context, null);
+              if (!mounted) return;
+              Navigator.of(context).pop();
             },
-            child: const Text('Удалить'),
             style: ButtonStyle(
               minimumSize: MaterialStateProperty.all<Size>(const Size(325, 45)),
               backgroundColor: MaterialStateProperty.all<Color>(
-                  Theme.of(context).primaryColor),
+                  widget.stateBill != null && widget.refillUid != null && widget.stateBill!.refillLoaded == false ? const Color(0xFFD0D0D0) : Theme.of(context).primaryColor
+              ),
             ),
-          ),
+            child: widget.stateBill != null && widget.refillUid != null && widget.stateBill?.refillLoaded == false
+                ? const Padding(
+              padding: EdgeInsets.all(0),
+              child: SizedBox(
+                height: 30,
+                width: 30,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: Color(0xFF9053EB),
+                ),
+              ),
+            )
+                : const Text('Удалить'),
+          ),),
           TextButton(
             onPressed: () => Navigator.pop(context, null),
             child: Text(

@@ -219,7 +219,6 @@ class _RefillDialogState extends State<_RefillDialog> {
             ),
             Observer(builder: (_) => ElevatedButton(
               onPressed: () async {
-                print(widget.stateBill.refillLoaded);
                 if (_formKey.currentState!.validate()) {
                    _formKey.currentState!.save();
                    if (widget.action == ActionsDialog.create) {
@@ -253,7 +252,7 @@ class _RefillDialogState extends State<_RefillDialog> {
                   ),
                 ),
               )
-                  : const Text('Пополнить'),
+                  : widget.action == ActionsDialog.create ? Text('Пополнить') : Text('Изменить'),
             ),),
             TextButton(
               onPressed: () => Navigator.pop(context, null),

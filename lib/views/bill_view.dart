@@ -4,6 +4,8 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:money_tracker/components/dialogs/bill_dialog.dart';
 import 'package:money_tracker/components/dialogs/refill_dialog.dart';
+import 'package:money_tracker/components/dialogs/transfer_dialog.dart';
+import 'package:money_tracker/views/bill_transfer_view.dart';
 import 'package:money_tracker/views/bill_uid_view.dart';
 import 'package:provider/provider.dart';
 
@@ -48,7 +50,8 @@ class BillView extends StatelessWidget {
                   : () => showRefillDialog(
                       context: context,
                       stateBill: stateBill,
-                      action: ActionsDialog.create),
+                      action: ActionsDialog.create,
+              ).then((value) async { await stateBill.getListBill(); }),
               icon: const Icon(Icons.arrow_circle_up),
             );
           }),
@@ -106,7 +109,7 @@ class BillView extends StatelessWidget {
               final refill = refills[index];
               final refillId = refills[index].id;
               return Container(
-                margin: const EdgeInsets.all(20.0),
+                margin: const EdgeInsets.all(10.0),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: const BorderRadius.all(
@@ -134,7 +137,8 @@ class BillView extends StatelessWidget {
                               stateBill: stateBill,
                               refill: refill,
                               action: ActionsDialog.update,
-                              refillId: refillId);
+                              refillId: refillId,
+                          ).then((value) async { await stateBill.getListBill(); });
                         },
                         backgroundColor: const Color(0xFF21B7CA),
                         foregroundColor: Colors.white,
@@ -148,7 +152,7 @@ class BillView extends StatelessWidget {
                             stateBill: stateBill,
                             refillUid: refillId,
                             refillModel: refill,
-                          );
+                          ).then((value) async { await stateBill.getListBill(); });
                         },
                         backgroundColor: const Color(0xFFFE4A49),
                         foregroundColor: Colors.white,
@@ -158,7 +162,7 @@ class BillView extends StatelessWidget {
                     ],
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(20.0),
+                    padding: const EdgeInsets.all(15.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -209,17 +213,13 @@ class BillView extends StatelessWidget {
                   SliverChildBuilderDelegate((BuildContext context, int index) {
                 return Column(
                   children: [
-                    const SizedBox(
-                      height: 64.0,
-                      child: DrawerHeader(
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF9053EB),
-                        ),
-                        child: Center(
-                          child: Text('Счета',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20)),
-                        ),
+                    Container(
+                      height: 50,
+                      color: const Color(0xFF9053EB),
+                      child: Center(
+                        child: Text('Счета',
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 16)),
                       ),
                     ),
                     ...bills.map((item) {
@@ -259,6 +259,53 @@ class BillView extends StatelessWidget {
                         },
                       );
                     }).toList(),
+                    Visibility(
+                      visible: bills.length > 1,
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 50.0,
+                            color: const Color(0xFF9053EB),
+                            child: const Center(
+                              child: Text('Переводы',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 16)),
+                            ),
+                          ),
+                          ListTile(
+                            leading: Icon(Icons.compare_arrows),
+                            title: const Text('Перевод между счетами'),
+                            onTap: () {
+                              showTransferDialog(
+                                      context: context, stateBill: stateBill)
+                                  .then((value) => Navigator.of(context).pop());
+                            },
+                          ),
+                          ListTile(
+                            leading: Icon(Icons.history),
+                            title: const Text('История переводов'),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                                    return MultiProvider(
+                                        providers: [
+                                          Provider(create: (context) => BillState(userId: stateBill.userId)),
+                                        ],
+                                        builder: (context, child) {
+                                          final BillState state = Provider.of<BillState>(context);
+                                          state.currentDate = stateBill.currentDate;
+                                          return const BillTransferView();
+                                        },
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    )
                   ],
                 );
               }, childCount: 1),
@@ -275,7 +322,7 @@ class BillView extends StatelessWidget {
               }
             }),
       ),
-      onDrawerChanged: (isOpened) => stateBill.getListBill,
+      // onDrawerChanged: (isOpened) async { await stateBill.getListBill(); },
     );
   }
 }

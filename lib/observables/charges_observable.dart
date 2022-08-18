@@ -34,6 +34,12 @@ abstract class ChargesStateBase with Store {
   @observable
   DateTime currentDate = DateTime.now();
 
+  @observable
+  double totalSumDay = 0.0;
+
+  @observable
+  double totalSumMonth = 0.0;
+
   @action
   Future checkExistCategory({required String title}) async {
     return await _firestore
@@ -321,5 +327,47 @@ abstract class ChargesStateBase with Store {
         currentDate = pickedDate;
     }
     return currentDate;
+  }
+
+  getTotalSumMonth() async {
+    final DateTime datetimeFrom =
+    DateTime(currentDate.year, currentDate.month, 01, 00, 00, 00);
+    final DateTime datetimeTo = DateTime(
+        currentDate.year,
+        currentDate.month,
+        DateUtils.getDaysInMonth(currentDate.year, currentDate.month),
+        23,
+        59,
+        59);
+
+    await _firestore.collection(COLLECTION_CHARGES).doc(userId)
+        .collection(COLLECTION_USER_CHARGES)
+        .where('created_at', isGreaterThanOrEqualTo: Timestamp.fromDate(datetimeFrom))
+        .where('created_at', isLessThanOrEqualTo: Timestamp.fromDate(datetimeTo))
+        .withConverter<ChargeModel>(
+      fromFirestore: (snapshot, _) => ChargeModel.fromJson(snapshot.data()!),
+      toFirestore: (user, _) => user.toJson(),
+    ).get().then((value) {
+      totalSumMonth = 0;
+      value.docs.map((e) => totalSumMonth += e.data().cost).toList();
+    });
+  }
+
+  getTotalSumDay() async {
+    final DateTime now = DateTime.now();
+    final DateTime datetimeFrom = DateTime(now.year, now.month, now.day, 00, 00, 00);
+    final DateTime datetimeTo = DateTime(now.year, now.month, now.day, 23, 59, 59);
+
+    await _firestore.collection(COLLECTION_CHARGES).doc(userId)
+        .collection(COLLECTION_USER_CHARGES)
+        .where('created_at', isGreaterThanOrEqualTo: Timestamp.fromDate(datetimeFrom))
+        .where('created_at', isLessThanOrEqualTo: Timestamp.fromDate(datetimeTo))
+        .withConverter<ChargeModel>(
+      fromFirestore: (snapshot, _) => ChargeModel.fromJson(snapshot.data()!),
+      toFirestore: (user, _) => user.toJson(),
+    ).get().then((value) {
+      totalSumDay = 0;
+      value.docs.map((e) => totalSumDay += e.data().cost).toList();
+    });
   }
 }

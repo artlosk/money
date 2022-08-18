@@ -215,7 +215,7 @@ class BillUidView extends StatelessWidget {
                               ],
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.all(20.0),
+                              padding: const EdgeInsets.all(15.0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
