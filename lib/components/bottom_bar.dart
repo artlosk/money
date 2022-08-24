@@ -14,6 +14,8 @@ class BottomBar extends StatelessWidget {
         return 'Счета';
       case TabButton.charges:
         return 'Расходы';
+      // case TabButton.reports:
+      //   return 'Отчеты';
       case TabButton.profile:
         return 'Профиль';
     }
@@ -25,21 +27,28 @@ class BottomBar extends StatelessWidget {
     return BottomNavigationBar(
       currentIndex: activeTabIndex, //stateTab.activeTabIndex,
       onTap: onClicked, //stateTab.updateTab,
+      type: BottomNavigationBarType.fixed,
       items: TabButton.values.map((tab) {
         switch(tab) {
           case TabButton.bill:
             return BottomNavigationBarItem(
-              icon: Icon(Icons.attach_money),
+              icon: const Icon(Icons.attach_money),
               label: _getTab(tab),
             );
           case TabButton.charges:
             return BottomNavigationBarItem(
-                icon: Icon(Icons.credit_card),
+                icon: const Icon(Icons.credit_card),
                 label: _getTab(tab),
             );
+          // case TabButton.reports:
+          // case TabButton.reports:
+          //   return BottomNavigationBarItem(
+          //     icon: const Icon(Icons.file_copy),
+          //     label: _getTab(tab),
+          //   );
           case TabButton.profile:
             return BottomNavigationBarItem(
-                icon: Icon(Icons.account_circle),
+                icon: const Icon(Icons.account_circle),
                 label: _getTab(tab),
             );
         }

@@ -18,8 +18,22 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import '../observables/tab_observable.dart';
 import 'charge_view.dart';
 
-class ChargesView extends StatelessWidget {
+class ChargesView extends StatefulWidget {
   const ChargesView({Key? key}) : super(key: key);
+
+  @override
+  State<ChargesView> createState() => _ChargesViewState();
+}
+
+class _ChargesViewState extends State<ChargesView> {
+  bool visibleContent = true;
+  bool explode = false;
+  bool legend = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +47,8 @@ class ChargesView extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             title: TextButton(
-              onPressed: () => stateCharges.selectDate(context).then((value) async {
+              onPressed: () =>
+                  stateCharges.selectDate(context).then((value) async {
                 await stateCharges.getTotalSumDay();
                 await stateCharges.getTotalSumMonth();
               }),
@@ -92,8 +107,20 @@ class ChargesView extends StatelessWidget {
                             ),
                           )
                         : SfCircularChart(
-                            series: <CircularSeries>[
-                              DoughnutSeries<HybridModel, String>(
+                      legend: Legend(
+                          isVisible: legend,
+                          // Overflowing legend content will be wraped
+                          overflowMode: LegendItemOverflowMode.wrap
+                      ),
+                              series: <CircularSeries>[
+                                PieSeries<HybridModel, String>(
+                                  onPointTap: (ChartPointDetails val) {
+                                    setState(() {
+                                      visibleContent = visibleContent ? false : true;
+                                      explode = explode ? false : true;
+                                      legend = legend ? false : true;
+                                    });
+                                  },
                                   dataSource: snapshot.data,
                                   pointColorMapper: (HybridModel data, _) =>
                                       HexColor.fromHex(data.category.color),
@@ -104,13 +131,24 @@ class ChargesView extends StatelessWidget {
                                   dataLabelSettings: const DataLabelSettings(
                                       showZeroValue: false,
                                       isVisible: true,
-                                      textStyle: TextStyle(fontSize: 18)),
-                                  dataLabelMapper: (HybridModel data, _) =>
-                                      data.category.title,
-                                  animationDuration: 500),
-                            ],
+                                      textStyle: TextStyle(fontSize: 12),
+                                      labelIntersectAction: LabelIntersectAction.shift,
+                                      labelPosition: ChartDataLabelPosition.outside,
+                                      connectorLineSettings: ConnectorLineSettings(type: ConnectorType.curve, length: '25%'),
+                                      useSeriesColor: true,
+                                  ),
+                                  dataLabelMapper: (HybridModel data, _) => legend ? data.cost.toString() : data.category.title,
+                                  animationDuration: 500,
+                                  startAngle: 100,
+                                  endAngle: 100,
+                                  radius: '60%',
+                                    explode: explode,
+                                    // All the segments will be exploded
+                                    explodeAll: true,
+                                ),
+                              ],
+                            ),
                           ),
-                  ),
                   Container(
                     margin: const EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
@@ -137,149 +175,174 @@ class ChargesView extends StatelessWidget {
                                   'В выбранном месяце: ${stateCharges.totalSumMonth}',
                                   style: TextStyle(fontSize: 14),
                                   textAlign: TextAlign.left),
-                              Text(
-                                  'Сегодня: ${stateCharges.totalSumDay}',
+                              Text('Сегодня: ${stateCharges.totalSumDay}',
                                   style: TextStyle(fontSize: 14),
                                   textAlign: TextAlign.left),
                             ]);
                       }),
                     ),
                   ),
-                  Expanded(
-                    flex: 2,
-                    child: ListView.builder(
-                      itemCount: categories!.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final category = categories[index];
-                        return GestureDetector(
-                          child: Container(
-                            margin: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(10.0),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.3),
-                                  spreadRadius: 5,
-                                  blurRadius: 7,
-                                  offset: const Offset(0, 5),
-                                ),
-                              ],
-                            ),
-                            child: Slidable(
-                              key: const ValueKey(1),
-                              endActionPane: ActionPane(
-                                motion: const ScrollMotion(),
-                                children: [
-                                  SlidableAction(
-                                    onPressed: (value) {
-                                      showCategoryDialog(
-                                        context: context,
-                                        stateCharges: stateCharges,
-                                        action: ActionsDialog.update,
-                                        category: category.category,
-                                      );
-                                    },
-                                    backgroundColor: const Color(0xFF21B7CA),
-                                    foregroundColor: Colors.white,
-                                    icon: Icons.edit,
-                                    label: 'Редактировать',
+                  Visibility(
+                      child: Expanded(
+                        flex: 2,
+                        child: ListView.builder(
+                          itemCount: categories!.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            final category = categories[index];
+                            return GestureDetector(
+                              child: Container(
+                                margin: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(10.0),
                                   ),
-                                  SlidableAction(
-                                    onPressed: (value) {
-                                      showConfirmDeleteDialog(
-                                          context: context,
-                                          stateCharges: stateCharges,
-                                          categoryUid: category.category.uid);
-                                    },
-                                    backgroundColor: const Color(0xFFFE4A49),
-                                    foregroundColor: Colors.white,
-                                    icon: Icons.delete,
-                                    label: 'Удалить',
-                                  ),
-                                ],
-                              ),
-
-                              child: Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          category.category.title,
-                                          style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 3.0),
-                                          child: Text(
-                                            'Всего: ${category.cost}',
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              color: Color(0xFFABABAB),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.3),
+                                      spreadRadius: 5,
+                                      blurRadius: 7,
+                                      offset: const Offset(0, 5),
                                     ),
-                                    IconButton(
-                                      icon: Icon(
-                                        Icons.arrow_forward_ios_sharp,
-                                        color: HexColor.fromHex(
-                                            category.category.color),
-                                        size: 30.0,
-                                      ),
-                                      onPressed: () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (BuildContext context) {
-                                              return MultiProvider(providers: [
-                                                Provider(create: (context) => ChargesState(userId: stateCharges.userId)),
-                                                Provider(create: (context) => BillState(userId: stateBill.userId)),
-                                              ],
-                                              builder: (context, child) {
-                                                final ChargesState state = Provider.of<ChargesState>(context);
-                                                state.currentDate = stateCharges.currentDate;
-                                                return ChargeView(category: category.category);
-                                              }
-                                              );
-                                            },
-                                          ),
-                                        );
-                                      },
-                                    )
                                   ],
                                 ),
+                                child: Slidable(
+                                  key: const ValueKey(1),
+                                  endActionPane: ActionPane(
+                                    motion: const ScrollMotion(),
+                                    children: [
+                                      SlidableAction(
+                                        onPressed: (value) {
+                                          showCategoryDialog(
+                                            context: context,
+                                            stateCharges: stateCharges,
+                                            action: ActionsDialog.update,
+                                            category: category.category,
+                                          );
+                                        },
+                                        backgroundColor:
+                                            const Color(0xFF21B7CA),
+                                        foregroundColor: Colors.white,
+                                        icon: Icons.edit,
+                                        label: 'Редактировать',
+                                      ),
+                                      SlidableAction(
+                                        onPressed: (value) {
+                                          showConfirmDeleteDialog(
+                                              context: context,
+                                              stateCharges: stateCharges,
+                                              categoryUid:
+                                                  category.category.uid);
+                                        },
+                                        backgroundColor:
+                                            const Color(0xFFFE4A49),
+                                        foregroundColor: Colors.white,
+                                        icon: Icons.delete,
+                                        label: 'Удалить',
+                                      ),
+                                    ],
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              category.category.title,
+                                              style: const TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 3.0),
+                                              child: Text(
+                                                'Всего: ${category.cost}',
+                                                style: const TextStyle(
+                                                  fontSize: 14,
+                                                  color: Color(0xFFABABAB),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        IconButton(
+                                          icon: Icon(
+                                            Icons.arrow_forward_ios_sharp,
+                                            color: HexColor.fromHex(
+                                                category.category.color),
+                                            size: 30.0,
+                                          ),
+                                          onPressed: () {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return MultiProvider(
+                                                      providers: [
+                                                        Provider(
+                                                            create: (context) =>
+                                                                ChargesState(
+                                                                    userId: stateCharges
+                                                                        .userId)),
+                                                        Provider(
+                                                            create: (context) =>
+                                                                BillState(
+                                                                    userId: stateBill
+                                                                        .userId)),
+                                                      ],
+                                                      builder:
+                                                          (context, child) {
+                                                        final ChargesState
+                                                            state = Provider.of<
+                                                                    ChargesState>(
+                                                                context);
+                                                        state.currentDate =
+                                                            stateCharges
+                                                                .currentDate;
+                                                        return ChargeView(
+                                                            category: category
+                                                                .category);
+                                                      });
+                                                },
+                                              ),
+                                            ).then((value) async {
+                                              await stateCharges
+                                                  .getTotalSumMonth();
+                                              await stateCharges
+                                                  .getTotalSumDay();
+                                            });
+                                          },
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          onTap: () {
-                            showChargeDialog(
-                                context: context,
-                                categoryUid: category.category.uid,
-                                stateCharges: stateCharges,
-                                stateBill: stateBill,
-                                //chargeDate: stateCharges.currentDate,
-                                action: ActionsDialog.create,
-                            ).then((value) async {
-                              await stateCharges.getTotalSumDay();
-                              await stateCharges.getTotalSumMonth();
-                            });
+                              onTap: () {
+                                showChargeDialog(
+                                  context: context,
+                                  categoryUid: category.category.uid,
+                                  stateCharges: stateCharges,
+                                  stateBill: stateBill,
+                                  //chargeDate: stateCharges.currentDate,
+                                  action: ActionsDialog.create,
+                                ).then((value) async {
+                                  await stateCharges.getTotalSumDay();
+                                  await stateCharges.getTotalSumMonth();
+                                });
+                              },
+                            );
                           },
-                        );
-                      },
-                    ),
-                  )
+                        ),
+                      ),
+                      visible: visibleContent),
                 ],
               );
             },

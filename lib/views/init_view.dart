@@ -12,6 +12,7 @@ import 'package:money_tracker/views/charges_view.dart';
 
 import 'package:money_tracker/views/login_view.dart';
 import 'package:money_tracker/views/profile_view.dart';
+import 'package:money_tracker/views/reports_view.dart';
 import 'package:provider/provider.dart';
 
 // import '../observables/auth_observable.dart';
@@ -61,6 +62,8 @@ class _InitViewState extends State<InitView> {
                 return const BillView();
               } else if (stateTab.activeTabIndex == TabButton.charges.index) {
                 return const ChargesView();
+              // } else if (stateTab.activeTabIndex == TabButton.reports.index) {
+              //   return const ReportsView();
               } else {
                 return const ProfileView();
               }
